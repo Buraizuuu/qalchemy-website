@@ -189,9 +189,20 @@
   /* iOS notch / Dynamic Island safe area */
   #navbar{ padding-top:env(safe-area-inset-top,0px); }
 
+  /* Cut GPU-heavy blur/animation load on phones — backdrop-filter + animated
+     blurred blobs are the main cause of janky/slow scrolling on iOS Safari */
+  @media (max-width: 767px){
+    .glass{ backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+    .aurora span{ filter:blur(50px); animation:none; }
+    .grad-border.animated{ animation:none; background-position:50% 50%; }
+    .float, .float-slow{ animation:none; }
+  }
+
   /* Mobile dropdown menu: solid backdrop so it never lets page content show/overlap through it */
   #mobile-menu{
     background:rgba(8,11,19,.98);
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
     -webkit-overflow-scrolling:touch;
     overflow-y:auto;
     max-height:calc(100vh - 100px);
@@ -320,7 +331,7 @@
       </div>
 
       <!-- floating card 1 -->
-      <div class="float-slow float-delay hidden sm:block absolute -left-10 top-10 glass rounded-2xl p-4 w-48 shadow-glow" style="--r:2deg;">
+      <div class="float-slow float-delay hidden md:block absolute -left-10 top-10 glass rounded-2xl p-4 w-48 shadow-glow" style="--r:2deg;">
         <div class="flex items-center gap-2 text-emerald-400 text-xs font-semibold mb-1">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
           100% Coverage
@@ -329,7 +340,7 @@
       </div>
 
       <!-- floating card 2 -->
-      <div class="float-slow hidden sm:block absolute -right-8 bottom-6 glass rounded-2xl p-4 w-52 shadow-glow" style="--r:-2deg; animation-delay:-4.5s;">
+      <div class="float-slow hidden md:block absolute -right-8 bottom-6 glass rounded-2xl p-4 w-52 shadow-glow" style="--r:-2deg; animation-delay:-4.5s;">
         <div class="text-xs font-semibold text-white mb-1">Traceability Matrix</div>
         <div class="flex gap-1 mt-2">
           <div class="h-1.5 flex-1 rounded-full bg-brand-500"></div>
