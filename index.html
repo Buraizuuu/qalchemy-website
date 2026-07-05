@@ -189,24 +189,40 @@
   /* iOS notch / Dynamic Island safe area */
   #navbar{ padding-top:env(safe-area-inset-top,0px); }
 
-  /* Cut GPU-heavy blur/animation load on phones — backdrop-filter + animated
-     blurred blobs are the main cause of janky/slow scrolling on iOS Safari */
-  @media (max-width: 767px){
-    .glass{ backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
-    .aurora span{ filter:blur(50px); animation:none; }
-    .grad-border.animated{ animation:none; background-position:50% 50%; }
-    .float, .float-slow{ animation:none; }
-  }
-
   /* Mobile dropdown menu: solid backdrop so it never lets page content show/overlap through it */
   #mobile-menu{
-    background:rgba(8,11,19,.98);
-    backdrop-filter:none;
-    -webkit-backdrop-filter:none;
     -webkit-overflow-scrolling:touch;
     overflow-y:auto;
     max-height:calc(100vh - 100px);
     max-height:calc(100dvh - 100px);
+  }
+
+  /* ── Mobile performance ─────────────────────────────────────────────
+     backdrop-filter:blur re-composites every layer on every scroll frame,
+     and filter:blur() on large animated elements forces constant GPU
+     overdraw. With this many glass panels + aurora blobs that's the
+     primary cause of iOS Safari jank. Swap blur for opaque flat colors
+     and stop decorative animations on phones.
+  ─────────────────────────────────────────────────────────────────── */
+  @media (max-width: 767px){
+    .glass{
+      backdrop-filter:none !important;
+      -webkit-backdrop-filter:none !important;
+      background:rgba(13,17,27,.95);
+    }
+    #mobile-menu{ background:rgba(8,11,19,.98); }
+
+    /* Hide the blurred aurora blobs entirely — filter:blur(90px) + infinite
+       animation is pure GPU overdraw with no payoff on a small screen */
+    .aurora{ display:none !important; }
+
+    .grad-border.animated{ animation:none; background-position:50% 50%; }
+    .float, .float-slow{ animation:none; }
+
+    /* No hover states on touch — saves transition/compositing overhead */
+    .hover-lift:hover{ transform:none; }
+    .card-glow:hover{ box-shadow:none; }
+    .spotlight::before{ display:none; }
   }
 </style>
 </head>
