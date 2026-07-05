@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QAlchemy — AI Powered Test Case Generation</title>
+<meta name="description" content="QAlchemy transforms user stories, requirements, and acceptance criteria into enterprise quality software test cases using AI. Open source. Bring your own API key.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ['"Space Grotesk"', 'sans-serif'],
+          sans: ['"Inter"', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+        },
+        colors: {
+          ink: { 950: '#05070d', 900: '#0a0e17', 800: '#0f1420', 700: '#161c2c' },
+          brand: { 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' },
+        },
+        boxShadow: {
+          glow: '0 0 0 1px rgba(96,165,250,0.15), 0 20px 60px -15px rgba(37,99,235,0.45)',
+        },
+      },
+    },
+  };
+</script>
+<style>
+  :root{
+    --grad-1:#60a5fa; --grad-2:#2563eb; --grad-3:#818cf8;
+  }
+  html{ background:#05070d; overflow-x:hidden; }
+  body{
+    background:
+      radial-gradient(ellipse 70% 40% at 15% 0%, rgba(37,99,235,.10), transparent 60%),
+      radial-gradient(ellipse 60% 35% at 85% 22%, rgba(124,58,237,.08), transparent 60%),
+      radial-gradient(ellipse 70% 40% at 20% 48%, rgba(14,165,233,.07), transparent 60%),
+      radial-gradient(ellipse 60% 35% at 88% 68%, rgba(37,99,235,.09), transparent 60%),
+      radial-gradient(ellipse 70% 40% at 15% 92%, rgba(124,58,237,.08), transparent 60%),
+      #05070d;
+    color:#e6e9f2;
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+    max-width:100vw;
+  }
+  ::selection{ background:rgba(59,130,246,.35); color:#fff; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar{ width:10px; height:10px; }
+  ::-webkit-scrollbar-track{ background:#05070d; }
+  ::-webkit-scrollbar-thumb{ background:#1e2536; border-radius:8px; }
+  ::-webkit-scrollbar-thumb:hover{ background:#2a3348; }
+
+  /* Scroll progress bar */
+  #scroll-progress{
+    position:fixed; top:0; left:0; height:2px; width:0%;
+    background:linear-gradient(90deg,var(--grad-1),var(--grad-3),var(--grad-2));
+    z-index:100; transition:width .1s linear;
+  }
+
+  /* Aurora background */
+  .aurora{
+    position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none;
+    mask-image:linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+    -webkit-mask-image:linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+  }
+  .aurora span{
+    position:absolute; border-radius:9999px; filter:blur(90px); opacity:.35;
+    animation:aurora-move 22s ease-in-out infinite;
+  }
+  .aurora span:nth-child(1){ width:560px; height:560px; background:#2563eb; top:-160px; left:-120px; }
+  .aurora span:nth-child(2){ width:480px; height:480px; background:#7c3aed; top:60px; right:-160px; animation-delay:-6s; }
+  .aurora span:nth-child(3){ width:520px; height:520px; background:#0ea5e9; bottom:-220px; left:30%; animation-delay:-12s; }
+  @keyframes aurora-move{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    33%{ transform:translate(40px,-30px) scale(1.08); }
+    66%{ transform:translate(-30px,30px) scale(0.95); }
+  }
+
+  .noise{
+    position:absolute; inset:0; opacity:.035; pointer-events:none; z-index:1;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Glass surfaces */
+  .glass{
+    background:rgba(15,20,32,.55);
+    border:1px solid rgba(255,255,255,.08);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+  }
+
+  /* Gradient border wrapper */
+  .grad-border{
+    position:relative; border-radius:1.5rem; padding:1px;
+    background:linear-gradient(135deg, rgba(96,165,250,.6), rgba(129,140,248,.15) 40%, rgba(37,99,235,.6));
+  }
+  .grad-border > div{ border-radius:calc(1.5rem - 1px); }
+  .grad-border.animated{ background-size:300% 300%; animation:border-flow 8s ease infinite; }
+  @keyframes border-flow{
+    0%{ background-position:0% 50%; }
+    50%{ background-position:100% 50%; }
+    100%{ background-position:0% 50%; }
+  }
+
+  /* Floating motion */
+  .float{ animation:float 6s ease-in-out infinite; }
+  .float-slow{ animation:float 9s ease-in-out infinite; }
+  .float-delay{ animation-delay:-3s; }
+  @keyframes float{
+    0%,100%{ transform:translateY(0px) rotate(var(--r,0deg)); }
+    50%{ transform:translateY(-16px) rotate(var(--r,0deg)); }
+  }
+
+  /* Scroll reveal */
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+  .reveal-scale{ opacity:0; transform:scale(.94); transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+  .reveal-scale.in{ opacity:1; transform:scale(1); }
+  .stagger.in > *{ transition-delay:calc(var(--i) * 80ms); }
+
+  /* Blur reveal */
+  .blur-reveal{ opacity:0; filter:blur(14px); transform:translateY(16px); transition:all 1s cubic-bezier(.16,1,.3,1); }
+  .blur-reveal.in{ opacity:1; filter:blur(0); transform:translateY(0); }
+
+  /* macOS window frame */
+  .mac-window{
+    border-radius:14px; overflow:hidden; background:#0d1220;
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 40px 100px -25px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.04);
+  }
+  .mac-bar{
+    display:flex; align-items:center; gap:6px; padding:10px 14px;
+    background:linear-gradient(#161c2c,#11151f);
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .mac-dot{ width:11px; height:11px; border-radius:9999px; }
+
+  /* Spotlight hover */
+  .spotlight{ position:relative; }
+  .spotlight::before{
+    content:''; position:absolute; inset:0; border-radius:inherit; opacity:0; pointer-events:none;
+    background:radial-gradient(320px circle at var(--x,50%) var(--y,50%), rgba(96,165,250,.16), transparent 60%);
+    transition:opacity .3s;
+  }
+  .spotlight:hover::before{ opacity:1; }
+
+  /* Magnetic buttons handled via JS transform */
+  .btn-primary{
+    background:linear-gradient(135deg,var(--grad-1),var(--grad-2));
+    box-shadow:0 10px 30px -8px rgba(37,99,235,.6);
+  }
+
+  .hover-lift{ transition:transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s; }
+  .hover-lift:hover{ transform:translateY(-6px); }
+
+  .card-glow:hover{ box-shadow:0 0 0 1px rgba(96,165,250,.25), 0 25px 60px -20px rgba(37,99,235,.5); }
+
+  .chip{
+    display:inline-flex; align-items:center; gap:6px; font-size:.75rem; font-weight:500;
+    padding:.4rem .75rem; border-radius:9999px; color:#c7d2fe;
+    background:rgba(96,165,250,.08); border:1px solid rgba(96,165,250,.25);
+  }
+
+  .num-counter{ font-variant-numeric:tabular-nums; }
+
+  .divider-fade{ height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent); }
+
+  /* image modal */
+  #modal{ position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center; padding:2rem; background:rgba(3,5,10,.85); backdrop-filter:blur(6px); }
+  #modal.open{ display:flex; }
+  #modal img{ max-width:min(1100px,92vw); max-height:88vh; border-radius:14px; box-shadow:0 40px 120px -20px rgba(0,0,0,.8); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+  }
+
+  .text-gradient{
+    background:linear-gradient(135deg,#fff 10%,#93b4fb 50%,#7c9ff7 90%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+</style>
+</head>
+<body class="antialiased">
+
+<div id="scroll-progress"></div>
+
+<!-- Image lightbox modal -->
+<div id="modal" onclick="closeModal()">
+  <img id="modal-img" src="" alt="Screenshot preview">
+</div>
+
+<!-- ================= NAVBAR ================= -->
+<header id="navbar" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">
+  <nav class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div id="nav-inner" class="mt-4 flex items-center justify-between rounded-2xl px-4 sm:px-5 py-3 transition-all duration-300">
+      <a href="#top" class="flex items-center gap-2.5">
+        <svg width="30" height="30" viewBox="0 0 40 40" fill="none">
+          <defs><linearGradient id="navmark" x1="3" y1="3" x2="37" y2="37" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M20 3C10.6112 3 3 10.6112 3 20C3 29.3888 10.6112 37 20 37C29.3888 37 37 29.3888 37 20C37 10.6112 29.3888 3 20 3ZM20 12C15.5817 12 12 15.5817 12 20C12 24.4183 15.5817 28 20 28C24.4183 28 28 24.4183 28 20C28 15.5817 24.4183 12 20 12Z" fill="url(#navmark)"/>
+          <path d="M22 22L38 22L38 38L22 38Z" fill="url(#navmark)"/>
+        </svg>
+        <span class="font-display font-semibold text-[17px] tracking-tight text-white">QAlchemy</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8 text-sm text-slate-300">
+        <a href="#showcase" class="hover:text-white transition-colors">Product</a>
+        <a href="#features" class="hover:text-white transition-colors">Features</a>
+        <a href="#why" class="hover:text-white transition-colors">Why QAlchemy</a>
+        <a href="#roadmap" class="hover:text-white transition-colors">Roadmap</a>
+        <a href="#open-source" class="hover:text-white transition-colors">Open Source</a>
+        <a href="#support" class="hover:text-white transition-colors">Support</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="https://github.com/Buraizuuu/qalchemy" target="_blank" rel="noopener" class="hidden sm:inline-flex btn-primary text-white text-sm font-semibold px-4 py-2 rounded-xl items-center gap-2 hover-lift">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.74.5 12.02c0 5.02 3.26 9.28 7.78 10.78.57.1.78-.25.78-.55v-1.94c-3.17.69-3.83-1.53-3.83-1.53-.52-1.31-1.27-1.66-1.27-1.66-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.74 2.68 1.24 3.33.95.1-.74.4-1.24.72-1.53-2.53-.29-5.19-1.27-5.19-5.63 0-1.24.44-2.26 1.17-3.06-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.14 1.17a10.9 10.9 0 0 1 5.72 0c2.18-1.48 3.14-1.17 3.14-1.17.62 1.57.23 2.73.11 3.02.73.8 1.17 1.82 1.17 3.06 0 4.37-2.67 5.34-5.21 5.62.41.36.77 1.06.77 2.14v3.17c0 .3.21.66.79.55 4.51-1.51 7.77-5.77 7.77-10.78C23.5 5.74 18.27.5 12 .5Z"/></svg>
+          View on GitHub
+        </a>
+        <button id="menu-btn" onclick="toggleMenu()" aria-label="Toggle menu" aria-expanded="false" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl glass text-white">
+          <svg id="menu-icon-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg id="menu-icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="hidden"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden mt-2 mx-0 glass rounded-2xl px-5 py-4 flex flex-col gap-1 text-sm text-slate-200">
+      <a href="#showcase" onclick="toggleMenu()" class="py-2.5 border-b border-white/5 hover:text-white transition-colors">Product</a>
+      <a href="#features" onclick="toggleMenu()" class="py-2.5 border-b border-white/5 hover:text-white transition-colors">Features</a>
+      <a href="#why" onclick="toggleMenu()" class="py-2.5 border-b border-white/5 hover:text-white transition-colors">Why QAlchemy</a>
+      <a href="#roadmap" onclick="toggleMenu()" class="py-2.5 border-b border-white/5 hover:text-white transition-colors">Roadmap</a>
+      <a href="#open-source" onclick="toggleMenu()" class="py-2.5 border-b border-white/5 hover:text-white transition-colors">Open Source</a>
+      <a href="#support" onclick="toggleMenu()" class="py-2.5 border-b border-white/5 hover:text-white transition-colors">Support</a>
+      <a href="https://github.com/Buraizuuu/qalchemy" target="_blank" rel="noopener" class="btn-primary text-white text-center font-semibold px-4 py-2.5 rounded-xl mt-2">View on GitHub</a>
+    </div>
+  </nav>
+</header>
+
+<!-- ================= HERO ================= -->
+<section id="top" class="relative pt-40 pb-24 lg:pt-48 lg:pb-32">
+  <div class="aurora"><span></span><span></span><span></span></div>
+  <div class="noise"></div>
+  <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-16 items-center">
+
+    <!-- Left -->
+    <div>
+      <div class="blur-reveal inline-flex items-center gap-2 mb-7 chip">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        v1.0.0 &middot; Free &amp; Open Source
+      </div>
+      <h1 class="blur-reveal font-display font-semibold text-[2.6rem] leading-[1.08] sm:text-6xl lg:text-[3.6rem] tracking-tight text-white" style="transition-delay:.05s">
+        Generate <span class="text-gradient">Enterprise Quality</span> Test Cases with AI
+      </h1>
+      <p class="blur-reveal mt-6 text-lg leading-relaxed text-slate-400 max-w-xl" style="transition-delay:.15s">
+        Transform user stories, requirements, and acceptance criteria into comprehensive software test cases in a single AI call.
+      </p>
+
+      <div class="blur-reveal mt-9 flex flex-wrap items-center gap-4" style="transition-delay:.25s">
+        <a id="download" href="https://github.com/Buraizuuu/qalchemy" target="_blank" rel="noopener" class="magnetic btn-primary text-white font-semibold px-6 py-3.5 rounded-2xl inline-flex items-center gap-2 hover-lift">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.74.5 12.02c0 5.02 3.26 9.28 7.78 10.78.57.1.78-.25.78-.55v-1.94c-3.17.69-3.83-1.53-3.83-1.53-.52-1.31-1.27-1.66-1.27-1.66-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.74 2.68 1.24 3.33.95.1-.74.4-1.24.72-1.53-2.53-.29-5.19-1.27-5.19-5.63 0-1.24.44-2.26 1.17-3.06-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.14 1.17a10.9 10.9 0 0 1 5.72 0c2.18-1.48 3.14-1.17 3.14-1.17.62 1.57.23 2.73.11 3.02.73.8 1.17 1.82 1.17 3.06 0 4.37-2.67 5.34-5.21 5.62.41.36.77 1.06.77 2.14v3.17c0 .3.21.66.79.55 4.51-1.51 7.77-5.77 7.77-10.78C23.5 5.74 18.27.5 12 .5Z"/></svg>
+          View on GitHub
+        </a>
+      </div>
+
+      <div class="blur-reveal mt-10 flex flex-wrap gap-2.5" style="transition-delay:.35s">
+        <span class="chip">Open Source</span>
+        <span class="chip">AI Powered</span>
+        <span class="chip">Bring Your Own AI</span>
+        <span class="chip">Multi Provider Support</span>
+        <span class="chip">Enterprise Quality</span>
+      </div>
+
+      <div class="blur-reveal mt-12 grid grid-cols-3 gap-6 max-w-md" style="transition-delay:.45s">
+        <div>
+          <div class="font-display text-2xl font-semibold text-white"><span class="counter num-counter" data-target="11">0</span></div>
+          <div class="text-xs text-slate-500 mt-1">Test categories</div>
+        </div>
+        <div>
+          <div class="font-display text-2xl font-semibold text-white"><span class="counter num-counter" data-target="7">0</span></div>
+          <div class="text-xs text-slate-500 mt-1">Export formats</div>
+        </div>
+        <div>
+          <div class="font-display text-2xl font-semibold text-white"><span class="counter num-counter" data-target="4">0</span></div>
+          <div class="text-xs text-slate-500 mt-1">AI providers</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: hero showcase -->
+    <div class="relative reveal-scale overflow-hidden sm:overflow-visible" id="hero-visual">
+      <div class="absolute inset-4 sm:-inset-16 -z-10 rounded-full bg-brand-600/20 blur-[100px]"></div>
+      <div class="relative float" style="--r:-1.2deg;">
+        <div class="grad-border animated shadow-glow">
+          <div class="mac-window">
+            <div class="mac-bar">
+              <span class="mac-dot bg-[#ff5f57]"></span><span class="mac-dot bg-[#febc2e]"></span><span class="mac-dot bg-[#28c840]"></span>
+              <span class="ml-3 text-[11px] text-slate-500 font-mono">qalchemy.app / dashboard</span>
+            </div>
+            <img src="assets/screenshots/dashboard.png" alt="QAlchemy dashboard showing test suites, generated test case totals, and recent activity" class="w-full block cursor-zoom-in" onclick="openModal('assets/screenshots/dashboard.png')">
+          </div>
+        </div>
+      </div>
+
+      <!-- floating card 1 -->
+      <div class="float-slow float-delay hidden sm:block absolute -left-10 top-10 glass rounded-2xl p-4 w-48 shadow-glow" style="--r:2deg;">
+        <div class="flex items-center gap-2 text-emerald-400 text-xs font-semibold mb-1">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+          100% Coverage
+        </div>
+        <div class="text-[11px] text-slate-400">All acceptance criteria mapped</div>
+      </div>
+
+      <!-- floating card 2 -->
+      <div class="float-slow hidden sm:block absolute -right-8 bottom-6 glass rounded-2xl p-4 w-52 shadow-glow" style="--r:-2deg; animation-delay:-4.5s;">
+        <div class="text-xs font-semibold text-white mb-1">Traceability Matrix</div>
+        <div class="flex gap-1 mt-2">
+          <div class="h-1.5 flex-1 rounded-full bg-brand-500"></div>
+          <div class="h-1.5 flex-1 rounded-full bg-brand-500"></div>
+          <div class="h-1.5 flex-1 rounded-full bg-brand-500/40"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- logo / trust strip -->
+  <div class="relative z-10 max-w-5xl mx-auto px-6 mt-24 reveal">
+    <p class="text-center text-xs uppercase tracking-[0.2em] text-slate-500 mb-6">Bring your own key &middot; works with</p>
+    <div class="flex flex-wrap items-center justify-center gap-x-12 gap-y-4 text-slate-500">
+      <span class="font-display text-lg tracking-tight opacity-70 hover:opacity-100 transition-opacity">Anthropic</span>
+      <span class="font-display text-lg tracking-tight opacity-70 hover:opacity-100 transition-opacity">OpenAI</span>
+      <span class="font-display text-lg tracking-tight opacity-70 hover:opacity-100 transition-opacity">Gemini</span>
+      <span class="font-display text-lg tracking-tight opacity-70 hover:opacity-100 transition-opacity">Ollama</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SHOWCASE ================= -->
+<section id="showcase" class="relative py-28 lg:py-36">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto reveal">
+      <span class="chip">Screenshot Showcase</span>
+      <h2 class="font-display mt-5 text-3xl sm:text-4xl font-semibold text-white tracking-tight">See it in action</h2>
+      <p class="mt-4 text-slate-400">Every screen captured directly from the real application &mdash; no mockups, no fiction.</p>
+    </div>
+
+    <div class="mt-20 space-y-28">
+
+      <!-- Row 1: Generate -->
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="reveal order-2 lg:order-1">
+          <span class="text-xs font-mono text-brand-400 tracking-wide">01 &nbsp;/&nbsp; INPUT</span>
+          <h3 class="font-display text-2xl font-semibold text-white mt-3">Describe the requirement, once</h3>
+          <p class="mt-4 text-slate-400 leading-relaxed">Fill in a feature name, module, user story, and acceptance criteria. Add business rules or context if you have them, then pick the testing categories that matter for this flow.</p>
+          <ul class="mt-6 space-y-3 text-sm text-slate-300">
+            <li class="flex gap-3"><svg class="shrink-0 mt-0.5 text-brand-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>User story &amp; acceptance criteria parsing</li>
+            <li class="flex gap-3"><svg class="shrink-0 mt-0.5 text-brand-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Optional business rules &amp; requirement refs</li>
+            <li class="flex gap-3"><svg class="shrink-0 mt-0.5 text-brand-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>11 selectable testing categories</li>
+          </ul>
+        </div>
+        <div class="order-1 lg:order-2 reveal-scale spotlight" onmousemove="spotlightMove(event,this)">
+          <div class="grad-border">
+            <div class="mac-window">
+              <div class="mac-bar"><span class="mac-dot bg-[#ff5f57]"></span><span class="mac-dot bg-[#febc2e]"></span><span class="mac-dot bg-[#28c840]"></span><span class="ml-3 text-[11px] text-slate-500 font-mono">qalchemy.app / generate</span></div>
+              <img src="assets/screenshots/generate.png" alt="QAlchemy generate test cases form with feature details, user story, and acceptance criteria fields" class="w-full block cursor-zoom-in hover:scale-[1.01] transition-transform duration-500" onclick="openModal('assets/screenshots/generate.png')">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Results overview -->
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="reveal-scale spotlight" onmousemove="spotlightMove(event,this)">
+          <div class="grad-border">
+            <div class="mac-window">
+              <div class="mac-bar"><span class="mac-dot bg-[#ff5f57]"></span><span class="mac-dot bg-[#febc2e]"></span><span class="mac-dot bg-[#28c840]"></span><span class="ml-3 text-[11px] text-slate-500 font-mono">qalchemy.app / results / overview</span></div>
+              <img src="assets/screenshots/results-overview.png" alt="QAlchemy results overview with requirement summary, business rules, risk assessment, and coverage" class="w-full block cursor-zoom-in hover:scale-[1.01] transition-transform duration-500" onclick="openModal('assets/screenshots/results-overview.png')">
+            </div>
+          </div>
+        </div>
+        <div class="reveal">
+          <span class="text-xs font-mono text-brand-400 tracking-wide">02 &nbsp;/&nbsp; ANALYSIS</span>
+          <h3 class="font-display text-2xl font-semibold text-white mt-3">A full QA analysis report, not a template</h3>
+          <p class="mt-4 text-slate-400 leading-relaxed">QAlchemy reasons like a senior QA engineer: it extracts business rules, surfaces requirement gaps, assesses risk, and produces high level scenarios before writing a single test case.</p>
+          <ul class="mt-6 space-y-3 text-sm text-slate-300">
+            <li class="flex gap-3"><svg class="shrink-0 mt-0.5 text-brand-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Requirement summary &amp; extracted business rules</li>
+            <li class="flex gap-3"><svg class="shrink-0 mt-0.5 text-brand-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Requirement gap &amp; risk assessment</li>
+            <li class="flex gap-3"><svg class="shrink-0 mt-0.5 text-brand-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Coverage mapped back to acceptance criteria</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Row 3: Test cases -->
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="reveal order-2 lg:order-1">
+          <span class="text-xs font-mono text-brand-400 tracking-wide">03 &nbsp;/&nbsp; TEST CASES</span>
+          <h3 class="font-display text-2xl font-semibold text-white mt-3">Positive, negative, boundary, and edge cases</h3>
+          <p class="mt-4 text-slate-400 leading-relaxed">Every generated test case is structured, filterable by category, severity, and priority, and fully editable &mdash; add, insert, duplicate, or delete rows and it saves instantly.</p>
+          <ul class="mt-6 space-y-3 text-sm text-slate-300">
+            <li class="flex gap-3"><svg class="shrink-0 mt-0.5 text-brand-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>11 test categories, filterable by severity &amp; priority</li>
+            <li class="flex gap-3"><svg class="shrink-0 mt-0.5 text-brand-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Fully editable, review ready output</li>
+            <li class="flex gap-3"><svg class="shrink-0 mt-0.5 text-brand-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Instant search across ID, title, and keyword</li>
+          </ul>
+        </div>
+        <div class="order-1 lg:order-2 reveal-scale spotlight" onmousemove="spotlightMove(event,this)">
+          <div class="grad-border">
+            <div class="mac-window">
+              <div class="mac-bar"><span class="mac-dot bg-[#ff5f57]"></span><span class="mac-dot bg-[#febc2e]"></span><span class="mac-dot bg-[#28c840]"></span><span class="ml-3 text-[11px] text-slate-500 font-mono">qalchemy.app / results / test-cases</span></div>
+              <img src="assets/screenshots/results-test-cases.png" alt="QAlchemy detailed test cases table with category, severity, and priority breakdown" class="w-full block cursor-zoom-in hover:scale-[1.01] transition-transform duration-500" onclick="openModal('assets/screenshots/results-test-cases.png')">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- secondary showcase grid -->
+    <div class="mt-24 grid md:grid-cols-2 gap-8">
+      <div class="reveal-scale spotlight" onmousemove="spotlightMove(event,this)">
+        <div class="grad-border">
+          <div class="mac-window">
+            <div class="mac-bar"><span class="mac-dot bg-[#ff5f57]"></span><span class="mac-dot bg-[#febc2e]"></span><span class="mac-dot bg-[#28c840]"></span><span class="ml-3 text-[11px] text-slate-500 font-mono">qalchemy.app / suites</span></div>
+            <img src="assets/screenshots/suites.png" alt="QAlchemy test suites list view" class="w-full block cursor-zoom-in hover:scale-[1.01] transition-transform duration-500" onclick="openModal('assets/screenshots/suites.png')">
+          </div>
+        </div>
+        <p class="text-center text-sm text-slate-500 mt-4">Test Suites &mdash; every suite you've generated, in one place</p>
+      </div>
+      <div class="reveal-scale spotlight" onmousemove="spotlightMove(event,this)">
+        <div class="grad-border">
+          <div class="mac-window">
+            <div class="mac-bar"><span class="mac-dot bg-[#ff5f57]"></span><span class="mac-dot bg-[#febc2e]"></span><span class="mac-dot bg-[#28c840]"></span><span class="ml-3 text-[11px] text-slate-500 font-mono">qalchemy.app / settings</span></div>
+            <img src="assets/screenshots/settings.png" alt="QAlchemy settings page with AI provider configuration and backup & restore" class="w-full block cursor-zoom-in hover:scale-[1.01] transition-transform duration-500" onclick="openModal('assets/screenshots/settings.png')">
+          </div>
+        </div>
+        <p class="text-center text-sm text-slate-500 mt-4">Settings &mdash; provider config, API keys, and backup &amp; restore</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FEATURES ================= -->
+<section id="features" class="relative py-28 lg:py-36">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto reveal">
+      <span class="chip">Capabilities</span>
+      <h2 class="font-display mt-5 text-3xl sm:text-4xl font-semibold text-white tracking-tight">Everything a senior QA engineer would check</h2>
+      <p class="mt-4 text-slate-400">Current, shipped functionality &mdash; nothing speculative.</p>
+    </div>
+
+    <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-5 stagger">
+      <!-- Card template repeated -->
+      <div class="reveal card-glow hover-lift glass rounded-2xl p-6 spotlight" onmousemove="spotlightMove(event,this)" style="--i:0">
+        <div class="w-11 h-11 rounded-xl bg-brand-500/15 flex items-center justify-center text-brand-400 mb-5">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 3 7v6c0 5 4 9 9 9s9-4 9-9V7l-9-5Z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <h3 class="font-semibold text-white">Senior QA Reasoning</h3>
+        <p class="mt-2 text-sm text-slate-400 leading-relaxed">Selects appropriate testing techniques instead of returning generic templates.</p>
+      </div>
+      <div class="reveal card-glow hover-lift glass rounded-2xl p-6 spotlight" onmousemove="spotlightMove(event,this)" style="--i:1">
+        <div class="w-11 h-11 rounded-xl bg-brand-500/15 flex items-center justify-center text-brand-400 mb-5">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        </div>
+        <h3 class="font-semibold text-white">11 Test Categories</h3>
+        <p class="mt-2 text-sm text-slate-400 leading-relaxed">Functional, Negative, Boundary, Validation, API, UI, Integration, Regression, Security, Accessibility, Exploratory.</p>
+      </div>
+      <div class="reveal card-glow hover-lift glass rounded-2xl p-6 spotlight" onmousemove="spotlightMove(event,this)" style="--i:2">
+        <div class="w-11 h-11 rounded-xl bg-brand-500/15 flex items-center justify-center text-brand-400 mb-5">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-4 4"/></svg>
+        </div>
+        <h3 class="font-semibold text-white">Traceability Matrix</h3>
+        <p class="mt-2 text-sm text-slate-400 leading-relaxed">Maps every acceptance criterion to the test cases that cover it.</p>
+      </div>
+      <div class="reveal card-glow hover-lift glass rounded-2xl p-6 spotlight" onmousemove="spotlightMove(event,this)" style="--i:3">
+        <div class="w-11 h-11 rounded-xl bg-brand-500/15 flex items-center justify-center text-brand-400 mb-5">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 17V7a2 2 0 0 1 2-2h9l5 5v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M14 5v5h5"/></svg>
+        </div>
+        <h3 class="font-semibold text-white">Provider Agnostic</h3>
+        <p class="mt-2 text-sm text-slate-400 leading-relaxed">Works with Anthropic, OpenAI, Gemini, or a local Ollama install.</p>
+      </div>
+      <div class="reveal card-glow hover-lift glass rounded-2xl p-6 spotlight" onmousemove="spotlightMove(event,this)" style="--i:4">
+        <div class="w-11 h-11 rounded-xl bg-brand-500/15 flex items-center justify-center text-brand-400 mb-5">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/><circle cx="12" cy="12" r="4"/></svg>
+        </div>
+        <h3 class="font-semibold text-white">Bring Your Own AI</h3>
+        <p class="mt-2 text-sm text-slate-400 leading-relaxed">Paste your own API key. Keys live only in your browser, never on a server.</p>
+      </div>
+      <div class="reveal card-glow hover-lift glass rounded-2xl p-6 spotlight" onmousemove="spotlightMove(event,this)" style="--i:5">
+        <div class="w-11 h-11 rounded-xl bg-brand-500/15 flex items-center justify-center text-brand-400 mb-5">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-3.4-7.03"/><path d="M21 4v5h-5"/></svg>
+        </div>
+        <h3 class="font-semibold text-white">Backup &amp; Restore</h3>
+        <p class="mt-2 text-sm text-slate-400 leading-relaxed">Download a full backup of your suites and settings, restore anywhere.</p>
+      </div>
+      <div class="reveal card-glow hover-lift glass rounded-2xl p-6 spotlight" onmousemove="spotlightMove(event,this)" style="--i:6">
+        <div class="w-11 h-11 rounded-xl bg-brand-500/15 flex items-center justify-center text-brand-400 mb-5">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+        </div>
+        <h3 class="font-semibold text-white">7 Export Formats</h3>
+        <p class="mt-2 text-sm text-slate-400 leading-relaxed">Excel, Azure DevOps, Jira/Xray, TestRail, Markdown, CSV, and JSON.</p>
+      </div>
+      <div class="reveal card-glow hover-lift glass rounded-2xl p-6 spotlight" onmousemove="spotlightMove(event,this)" style="--i:7">
+        <div class="w-11 h-11 rounded-xl bg-brand-500/15 flex items-center justify-center text-brand-400 mb-5">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 .5C5.73.5.5 5.74.5 12.02c0 5.02 3.26 9.28 7.78 10.78.57.1.78-.25.78-.55v-1.94c-3.17.69-3.83-1.53-3.83-1.53-.52-1.31-1.27-1.66-1.27-1.66-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.74 2.68 1.24 3.33.95.1-.74.4-1.24.72-1.53-2.53-.29-5.19-1.27-5.19-5.63 0-1.24.44-2.26 1.17-3.06-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.14 1.17a10.9 10.9 0 0 1 5.72 0c2.18-1.48 3.14-1.17 3.14-1.17.62 1.57.23 2.73.11 3.02.73.8 1.17 1.82 1.17 3.06 0 4.37-2.67 5.34-5.21 5.62.41.36.77 1.06.77 2.14v3.17c0 .3.21.66.79.55 4.51-1.51 7.77-5.77 7.77-10.78C23.5 5.74 18.27.5 12 .5Z"/></svg>
+        </div>
+        <h3 class="font-semibold text-white">Open Source</h3>
+        <p class="mt-2 text-sm text-slate-400 leading-relaxed">MIT licensed. No account system, no server side database.</p>
+      </div>
+    </div>
+
+    <!-- export format strip -->
+    <div class="mt-14 reveal">
+      <div class="glass rounded-2xl px-6 py-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+        <span class="text-xs uppercase tracking-[0.2em] text-slate-500 mr-2">Export to</span>
+        <span class="text-sm text-slate-300 font-medium">Excel</span>
+        <span class="text-sm text-slate-300 font-medium">Azure DevOps</span>
+        <span class="text-sm text-slate-300 font-medium">Jira / Xray</span>
+        <span class="text-sm text-slate-300 font-medium">TestRail</span>
+        <span class="text-sm text-slate-300 font-medium">Markdown</span>
+        <span class="text-sm text-slate-300 font-medium">CSV</span>
+        <span class="text-sm text-slate-300 font-medium">JSON</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHY QALCHEMY ================= -->
+<section id="why" class="relative py-28 lg:py-36">
+  <div class="max-w-6xl mx-auto px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto reveal">
+      <span class="chip">Comparison</span>
+      <h2 class="font-display mt-5 text-3xl sm:text-4xl font-semibold text-white tracking-tight">Why QAlchemy</h2>
+      <p class="mt-4 text-slate-400">Manual test writing doesn't scale with how fast requirements change.</p>
+    </div>
+
+    <div class="mt-16 grid md:grid-cols-2 gap-6">
+      <!-- Traditional -->
+      <div class="reveal glass rounded-3xl p-8 border-white/5">
+        <h3 class="font-display text-lg font-semibold text-slate-300 mb-6">Traditional Test Case Writing</h3>
+        <ul class="space-y-4 text-sm text-slate-400">
+          <li class="flex items-start gap-3"><svg class="shrink-0 mt-0.5 text-rose-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg><span><strong class="text-slate-300 font-medium">Time:</strong> Hours per feature, manually drafted</span></li>
+          <li class="flex items-start gap-3"><svg class="shrink-0 mt-0.5 text-rose-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg><span><strong class="text-slate-300 font-medium">Coverage:</strong> Depends on individual thoroughness</span></li>
+          <li class="flex items-start gap-3"><svg class="shrink-0 mt-0.5 text-rose-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg><span><strong class="text-slate-300 font-medium">Edge Cases:</strong> Easy to overlook under deadline pressure</span></li>
+          <li class="flex items-start gap-3"><svg class="shrink-0 mt-0.5 text-rose-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg><span><strong class="text-slate-300 font-medium">Consistency:</strong> Varies tester to tester</span></li>
+          <li class="flex items-start gap-3"><svg class="shrink-0 mt-0.5 text-rose-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg><span><strong class="text-slate-300 font-medium">Traceability:</strong> Maintained by hand, often stale</span></li>
+          <li class="flex items-start gap-3"><svg class="shrink-0 mt-0.5 text-rose-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg><span><strong class="text-slate-300 font-medium">Productivity:</strong> Test writing competes with test execution time</span></li>
+        </ul>
+      </div>
+
+      <!-- QAlchemy -->
+      <div class="reveal grad-border animated shadow-glow">
+        <div class="rounded-[calc(1.5rem-1px)] bg-ink-800 p-8 h-full">
+          <h3 class="font-display text-lg font-semibold text-white mb-6 flex items-center gap-2">
+            QAlchemy
+            <span class="chip">AI Powered</span>
+          </h3>
+          <ul class="space-y-4 text-sm text-slate-300">
+            <li class="flex items-start gap-3"><svg class="shrink-0 mt-0.5 text-emerald-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span><strong class="text-white font-medium">Time:</strong> Comprehensive test cases in a single AI call</span></li>
+            <li class="flex items-start gap-3"><svg class="shrink-0 mt-0.5 text-emerald-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span><strong class="text-white font-medium">Coverage:</strong> 11 categories generated systematically</span></li>
+            <li class="flex items-start gap-3"><svg class="shrink-0 mt-0.5 text-emerald-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span><strong class="text-white font-medium">Edge Cases:</strong> Boundary &amp; risk based scenarios by design</span></li>
+            <li class="flex items-start gap-3"><svg class="shrink-0 mt-0.5 text-emerald-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span><strong class="text-white font-medium">Consistency:</strong> Same senior QA reasoning, every time</span></li>
+            <li class="flex items-start gap-3"><svg class="shrink-0 mt-0.5 text-emerald-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span><strong class="text-white font-medium">Traceability:</strong> Matrix generated automatically from criteria</span></li>
+            <li class="flex items-start gap-3"><svg class="shrink-0 mt-0.5 text-emerald-400" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span><strong class="text-white font-medium">Productivity:</strong> Review &amp; edit ready output, export anywhere</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ROADMAP ================= -->
+<section id="roadmap" class="relative py-28 lg:py-36">
+  <div class="max-w-6xl mx-auto px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto reveal">
+      <span class="chip">Roadmap</span>
+      <h2 class="font-display mt-5 text-3xl sm:text-4xl font-semibold text-white tracking-tight">Coming soon</h2>
+      <p class="mt-4 text-slate-400">Clearly separated from what ships today &mdash; nothing below is implemented yet.</p>
+    </div>
+
+    <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-5 gap-4 stagger">
+      <div class="reveal glass rounded-2xl p-5 text-center opacity-80 hover:opacity-100 transition-opacity" style="--i:0">
+        <div class="text-xs font-mono text-amber-400/80 mb-2">SOON</div>
+        <div class="text-sm font-medium text-slate-200">Test Suite Management</div>
+      </div>
+      <div class="reveal glass rounded-2xl p-5 text-center opacity-80 hover:opacity-100 transition-opacity" style="--i:1">
+        <div class="text-xs font-mono text-amber-400/80 mb-2">SOON</div>
+        <div class="text-sm font-medium text-slate-200">AI Test Execution</div>
+      </div>
+      <div class="reveal glass rounded-2xl p-5 text-center opacity-80 hover:opacity-100 transition-opacity" style="--i:2">
+        <div class="text-xs font-mono text-amber-400/80 mb-2">SOON</div>
+        <div class="text-sm font-medium text-slate-200">AI Bug Report Generation</div>
+      </div>
+      <div class="reveal glass rounded-2xl p-5 text-center opacity-80 hover:opacity-100 transition-opacity" style="--i:3">
+        <div class="text-xs font-mono text-amber-400/80 mb-2">SOON</div>
+        <div class="text-sm font-medium text-slate-200">Playwright Export</div>
+      </div>
+      <div class="reveal glass rounded-2xl p-5 text-center opacity-80 hover:opacity-100 transition-opacity" style="--i:4">
+        <div class="text-xs font-mono text-amber-400/80 mb-2">SOON</div>
+        <div class="text-sm font-medium text-slate-200">Cypress Export</div>
+      </div>
+      <div class="reveal glass rounded-2xl p-5 text-center opacity-80 hover:opacity-100 transition-opacity" style="--i:5">
+        <div class="text-xs font-mono text-amber-400/80 mb-2">SOON</div>
+        <div class="text-sm font-medium text-slate-200">API Test Generation</div>
+      </div>
+      <div class="reveal glass rounded-2xl p-5 text-center opacity-80 hover:opacity-100 transition-opacity" style="--i:6">
+        <div class="text-xs font-mono text-amber-400/80 mb-2">SOON</div>
+        <div class="text-sm font-medium text-slate-200">Desktop Application</div>
+      </div>
+      <div class="reveal glass rounded-2xl p-5 text-center opacity-80 hover:opacity-100 transition-opacity" style="--i:7">
+        <div class="text-xs font-mono text-amber-400/80 mb-2">SOON</div>
+        <div class="text-sm font-medium text-slate-200">Collaboration</div>
+      </div>
+      <div class="reveal glass rounded-2xl p-5 text-center opacity-80 hover:opacity-100 transition-opacity" style="--i:8">
+        <div class="text-xs font-mono text-amber-400/80 mb-2">SOON</div>
+        <div class="text-sm font-medium text-slate-200">CI/CD Integration</div>
+      </div>
+      <div class="reveal glass rounded-2xl p-5 text-center opacity-80 hover:opacity-100 transition-opacity" style="--i:9">
+        <div class="text-xs font-mono text-amber-400/80 mb-2">SOON</div>
+        <div class="text-sm font-medium text-slate-200">Plugin Marketplace</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= OPEN SOURCE ================= -->
+<section id="open-source" class="relative py-28 lg:py-36 overflow-hidden">
+  <div class="aurora opacity-60"><span></span><span></span><span></span></div>
+  <div class="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 text-center">
+    <div class="reveal">
+      <span class="chip">Open Source</span>
+      <h2 class="font-display mt-5 text-3xl sm:text-4xl lg:text-5xl font-semibold text-white tracking-tight">Free. Transparent. Yours.</h2>
+      <p class="mt-5 text-slate-400 max-w-2xl mx-auto leading-relaxed">No account system, no server side database, no vendor lock-in. QAlchemy runs entirely in your browser and works with whichever AI provider you choose.</p>
+    </div>
+
+    <div class="mt-14 grid sm:grid-cols-3 gap-5 stagger">
+      <div class="reveal glass rounded-2xl p-6 text-left" style="--i:0">
+        <div class="text-brand-400 mb-3"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 3 7v6c0 5 4 9 9 9s9-4 9-9V7l-9-5Z"/></svg></div>
+        <h3 class="font-semibold text-white text-sm">MIT License</h3>
+      </div>
+      <div class="reveal glass rounded-2xl p-6 text-left" style="--i:1">
+        <div class="text-brand-400 mb-3"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/></svg></div>
+        <h3 class="font-semibold text-white text-sm">Community Driven</h3>
+      </div>
+      <div class="reveal glass rounded-2xl p-6 text-left" style="--i:2">
+        <div class="text-brand-400 mb-3"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+        <h3 class="font-semibold text-white text-sm">Privacy First</h3>
+      </div>
+      <div class="reveal glass rounded-2xl p-6 text-left" style="--i:3">
+        <div class="text-brand-400 mb-3"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/><circle cx="12" cy="12" r="4"/></svg></div>
+        <h3 class="font-semibold text-white text-sm">Bring Your Own AI Provider</h3>
+      </div>
+      <div class="reveal glass rounded-2xl p-6 text-left" style="--i:4">
+        <div class="text-brand-400 mb-3"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 17V7a2 2 0 0 1 2-2h9l5 5v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/></svg></div>
+        <h3 class="font-semibold text-white text-sm">Multi Provider Support</h3>
+      </div>
+      <div class="reveal glass rounded-2xl p-6 text-left" style="--i:5">
+        <div class="text-brand-400 mb-3"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></div>
+        <h3 class="font-semibold text-white text-sm">Open Source Forever</h3>
+      </div>
+    </div>
+
+    <div class="reveal mt-14">
+      <a href="https://github.com/Buraizuuu/qalchemy" target="_blank" rel="noopener" class="magnetic inline-flex items-center gap-3 bg-white text-ink-950 font-semibold px-7 py-4 rounded-2xl hover-lift shadow-glow">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.74.5 12.02c0 5.02 3.26 9.28 7.78 10.78.57.1.78-.25.78-.55v-1.94c-3.17.69-3.83-1.53-3.83-1.53-.52-1.31-1.27-1.66-1.27-1.66-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.74 2.68 1.24 3.33.95.1-.74.4-1.24.72-1.53-2.53-.29-5.19-1.27-5.19-5.63 0-1.24.44-2.26 1.17-3.06-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.14 1.17a10.9 10.9 0 0 1 5.72 0c2.18-1.48 3.14-1.17 3.14-1.17.62 1.57.23 2.73.11 3.02.73.8 1.17 1.82 1.17 3.06 0 4.37-2.67 5.34-5.21 5.62.41.36.77 1.06.77 2.14v3.17c0 .3.21.66.79.55 4.51-1.51 7.77-5.77 7.77-10.78C23.5 5.74 18.27.5 12 .5Z"/></svg>
+        Star on GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CREATOR ================= -->
+<section id="support" class="relative py-28 lg:py-32">
+  <div class="max-w-3xl mx-auto px-6 lg:px-8">
+    <div class="reveal-scale grad-border shadow-glow">
+      <div class="rounded-[calc(1.5rem-1px)] bg-ink-800 p-10 sm:p-12 text-center relative overflow-hidden">
+        <div class="absolute -top-20 -right-20 w-64 h-64 bg-brand-600/20 rounded-full blur-[80px]"></div>
+        <div class="relative z-10">
+          <h3 class="font-display text-xl font-semibold text-white">Support QAlchemy</h3>
+          <p class="text-slate-400 text-sm mt-3 max-w-md mx-auto">If QAlchemy saves your team time, consider supporting its continued development.</p>
+          <a href="https://ko-fi.com/buraizuuu" target="_blank" rel="noopener" aria-label="Support QAlchemy on Ko-fi" class="magnetic mt-6 inline-flex items-center gap-2 glass text-white font-medium text-sm px-6 py-3 rounded-xl hover-lift">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
+            Buy me a coffee
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="relative border-t border-white/5 py-14">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+    <div class="flex items-center gap-2.5">
+      <svg width="24" height="24" viewBox="0 0 40 40" fill="none">
+        <defs><linearGradient id="footmark" x1="3" y1="3" x2="37" y2="37" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M20 3C10.6112 3 3 10.6112 3 20C3 29.3888 10.6112 37 20 37C29.3888 37 37 29.3888 37 20C37 10.6112 29.3888 3 20 3ZM20 12C15.5817 12 12 15.5817 12 20C12 24.4183 15.5817 28 20 28C24.4183 28 28 24.4183 28 20C28 15.5817 24.4183 12 20 12Z" fill="url(#footmark)"/>
+        <path d="M22 22L38 22L38 38L22 38Z" fill="url(#footmark)"/>
+      </svg>
+      <span class="text-sm text-slate-400">&copy; 2026 QAlchemy &middot; MIT Licensed</span>
+    </div>
+    <div class="flex items-center gap-6 text-sm text-slate-400">
+      <a href="https://github.com/Buraizuuu/qalchemy" target="_blank" rel="noopener" class="hover:text-white transition-colors">GitHub</a>
+      <a href="https://ko-fi.com/buraizuuu" target="_blank" rel="noopener" class="hover:text-white transition-colors">Support</a>
+      <a href="#top" class="hover:text-white transition-colors">Back to top</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll progress + navbar shrink
+  const progress = document.getElementById('scroll-progress');
+  const navInner = document.getElementById('nav-inner');
+  function onScroll(){
+    const h = document.documentElement;
+    const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    progress.style.width = pct + '%';
+    if (h.scrollTop > 20){
+      navInner.classList.add('glass','shadow-[0_8px_30px_-10px_rgba(0,0,0,.6)]');
+    } else {
+      navInner.classList.remove('glass','shadow-[0_8px_30px_-10px_rgba(0,0,0,.6)]');
+    }
+  }
+  document.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  // Scroll reveal via IntersectionObserver
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold:.15, rootMargin:'0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal, .reveal-scale, .blur-reveal').forEach(el=>io.observe(el));
+
+  // Animated counters
+  const counterIo = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const target = parseInt(el.dataset.target, 10);
+      const dur = 1200; const start = performance.now();
+      function tick(now){
+        const p = Math.min(1, (now - start) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(eased * target);
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      counterIo.unobserve(el);
+    });
+  }, { threshold:.5 });
+  document.querySelectorAll('.counter').forEach(el=>counterIo.observe(el));
+
+  // Spotlight hover
+  function spotlightMove(e, el){
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--x', (e.clientX - r.left) + 'px');
+    el.style.setProperty('--y', (e.clientY - r.top) + 'px');
+  }
+
+  // Magnetic buttons
+  document.querySelectorAll('.magnetic').forEach(btn=>{
+    btn.addEventListener('mousemove', (e)=>{
+      const r = btn.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width/2) * .25;
+      const y = (e.clientY - r.top - r.height/2) * .35;
+      btn.style.transform = `translate(${x}px, ${y}px)`;
+    });
+    btn.addEventListener('mouseleave', ()=>{ btn.style.transform = 'translate(0,0)'; });
+  });
+
+  // Hero mouse parallax
+  const heroVisual = document.getElementById('hero-visual');
+  document.addEventListener('mousemove', (e)=>{
+    if (window.innerWidth < 1024 || !heroVisual) return;
+    const x = (e.clientX / window.innerWidth - .5) * 14;
+    const y = (e.clientY / window.innerHeight - .5) * 14;
+    heroVisual.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+  });
+
+  // Lightbox modal
+  function openModal(src){
+    document.getElementById('modal-img').src = src;
+    document.getElementById('modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(){
+    document.getElementById('modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', (e)=>{ if (e.key === 'Escape') closeModal(); });
+
+  // Mobile menu
+  function toggleMenu(){
+    const menu = document.getElementById('mobile-menu');
+    const btn = document.getElementById('menu-btn');
+    const open = menu.classList.toggle('hidden') === false;
+    btn.setAttribute('aria-expanded', String(open));
+    document.getElementById('menu-icon-open').classList.toggle('hidden', open);
+    document.getElementById('menu-icon-close').classList.toggle('hidden', !open);
+  }
+</script>
+</body>
+</html>
