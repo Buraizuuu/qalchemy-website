@@ -2,7 +2,7 @@
 <html lang="en" class="scroll-smooth">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>QAlchemy — AI Powered Test Case Generation</title>
 <meta name="description" content="QAlchemy transforms user stories, requirements, and acceptance criteria into enterprise quality software test cases using AI. Open source. Bring your own API key.">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
@@ -173,7 +173,7 @@
   .divider-fade{ height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent); }
 
   /* image modal */
-  #modal{ position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center; padding:2rem; background:rgba(3,5,10,.85); backdrop-filter:blur(6px); }
+  #modal{ position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center; padding:2rem; background:rgba(3,5,10,.85); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); }
   #modal.open{ display:flex; }
   #modal img{ max-width:min(1100px,92vw); max-height:88vh; border-radius:14px; box-shadow:0 40px 120px -20px rgba(0,0,0,.8); }
 
@@ -184,6 +184,18 @@
   .text-gradient{
     background:linear-gradient(135deg,#fff 10%,#93b4fb 50%,#7c9ff7 90%);
     -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+
+  /* iOS notch / Dynamic Island safe area */
+  #navbar{ padding-top:env(safe-area-inset-top,0px); }
+
+  /* Mobile dropdown menu: solid backdrop so it never lets page content show/overlap through it */
+  #mobile-menu{
+    background:rgba(8,11,19,.98);
+    -webkit-overflow-scrolling:touch;
+    overflow-y:auto;
+    max-height:calc(100vh - 100px);
+    max-height:calc(100dvh - 100px);
   }
 </style>
 </head>
@@ -802,7 +814,14 @@
     btn.setAttribute('aria-expanded', String(open));
     document.getElementById('menu-icon-open').classList.toggle('hidden', open);
     document.getElementById('menu-icon-close').classList.toggle('hidden', !open);
+    document.body.style.overflow = open ? 'hidden' : '';
   }
+  window.addEventListener('resize', ()=>{
+    if (window.innerWidth >= 768){
+      const menu = document.getElementById('mobile-menu');
+      if (!menu.classList.contains('hidden')) toggleMenu();
+    }
+  });
 </script>
 </body>
 </html>
