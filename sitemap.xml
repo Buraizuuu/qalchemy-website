@@ -6,37 +6,37 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://qalchemy.vercel.app/downloads.html</loc>
+    <loc>https://qalchemy.vercel.app/downloads</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://qalchemy.vercel.app/gallery.html</loc>
+    <loc>https://qalchemy.vercel.app/gallery</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://qalchemy.vercel.app/docs.html</loc>
+    <loc>https://qalchemy.vercel.app/docs</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://qalchemy.vercel.app/changelog.html</loc>
+    <loc>https://qalchemy.vercel.app/changelog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://qalchemy.vercel.app/about.html</loc>
+    <loc>https://qalchemy.vercel.app/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://qalchemy.vercel.app/privacy.html</loc>
+    <loc>https://qalchemy.vercel.app/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://qalchemy.vercel.app/terms.html</loc>
+    <loc>https://qalchemy.vercel.app/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
