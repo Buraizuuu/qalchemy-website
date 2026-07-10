@@ -2,133 +2,408 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>QAlchemy — Coming Soon</title>
-<meta name="description" content="QAlchemy is the all-in-one toolbox for Quality Engineers. Coming soon.">
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QAlchemy: Turn Requirements Into Complete QA Test Suites</title>
+<meta name="description" content="QAlchemy turns user stories into complete QA test suites: requirement summaries, risk assessments, test cases, and traceability matrices. A local desktop workspace, any AI provider.">
+<link rel="canonical" href="https://qalchemy.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="QAlchemy">
+<meta property="og:title" content="QAlchemy: Turn Requirements Into Complete QA Test Suites">
+<meta property="og:description" content="QAlchemy turns user stories into complete QA test suites: requirement summaries, risk assessments, test cases, and traceability matrices. A local desktop workspace, any AI provider.">
+<meta property="og:url" content="https://qalchemy.vercel.app/">
+<meta property="og:image" content="https://qalchemy.vercel.app/assets/screenshots/dashboard.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="QAlchemy: Turn Requirements Into Complete QA Test Suites">
+<meta name="twitter:description" content="QAlchemy turns user stories into complete QA test suites: requirement summaries, risk assessments, test cases, and traceability matrices. A local desktop workspace, any AI provider.">
+<meta name="twitter:image" content="https://qalchemy.vercel.app/assets/screenshots/dashboard.png">
+<meta name="theme-color" content="#3d5afe">
+<link rel="icon" href="assets/qalchemy-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root{ color-scheme: dark; }
-  *{ box-sizing:border-box; }
-  html, body{ margin:0; padding:0; }
-  html{ background:#05070d; overflow-x:hidden; }
-  body{
-    min-height:100vh;
-    background:
-      radial-gradient(ellipse 70% 40% at 15% 0%, rgba(37,99,235,.10), transparent 60%),
-      radial-gradient(ellipse 60% 35% at 85% 22%, rgba(124,58,237,.08), transparent 60%),
-      radial-gradient(ellipse 70% 40% at 20% 90%, rgba(14,165,233,.07), transparent 60%),
-      #05070d;
-    color:#e6e9f2;
-    font-family:'Inter',sans-serif;
-    overflow-x:hidden;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:24px;
-  }
-  ::selection{ background:rgba(59,130,246,.35); color:#fff; }
-
-  .aurora{ position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
-  .aurora span{
-    position:absolute; border-radius:9999px; filter:blur(90px); opacity:.35;
-    animation:aurora-move 22s ease-in-out infinite;
-  }
-  .aurora span:nth-child(1){ width:560px; height:560px; background:#2563eb; top:-160px; left:-120px; }
-  .aurora span:nth-child(2){ width:480px; height:480px; background:#7c3aed; top:60px; right:-160px; animation-delay:-6s; }
-  .aurora span:nth-child(3){ width:520px; height:520px; background:#0ea5e9; bottom:-220px; left:30%; animation-delay:-12s; }
-  @keyframes aurora-move{
-    0%,100%{ transform:translate(0,0) scale(1); }
-    33%{ transform:translate(40px,-30px) scale(1.08); }
-    66%{ transform:translate(-30px,30px) scale(.95); }
-  }
-
-  .noise{
-    position:fixed; inset:0; opacity:.035; pointer-events:none; z-index:1;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  main{
-    position:relative;
-    z-index:10;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:28px;
-    text-align:center;
-    max-width:28rem;
-    animation:fade-in .6s ease both;
-  }
-  @keyframes fade-in{
-    from{ opacity:0; transform:translateY(8px); }
-    to{ opacity:1; transform:translateY(0); }
-  }
-
-  .logo{ animation:float 6s ease-in-out infinite; }
-  @keyframes float{
-    0%,100%{ transform:translateY(0px); }
-    50%{ transform:translateY(-10px); }
-  }
-
-  .title-block{ display:flex; flex-direction:column; align-items:center; gap:12px; }
-  h1{
-    font-family:'Space Grotesk',sans-serif;
-    font-size:2.5rem;
-    font-weight:700;
-    letter-spacing:-0.02em;
-    color:#fff;
-    margin:0;
-  }
-  .tagline{ font-size:.95rem; color:#9aa4bd; margin:0; max-width:26rem; }
-
-  .badge{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    padding:8px 18px;
-    border-radius:999px;
-    border:1px solid rgba(96,165,250,.35);
-    background:rgba(37,99,235,.08);
-  }
-  .badge-dot{
-    width:7px; height:7px; border-radius:999px; background:#60a5fa;
-    box-shadow:0 0 8px 1px rgba(96,165,250,.8);
-  }
-  .badge-label{
-    font-size:.8rem; font-weight:600; letter-spacing:.04em;
-    color:#bcd0fb; text-transform:uppercase;
-  }
-
-  .footnote{ font-size:.75rem; color:#5c6684; margin:0; }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "QAlchemy",
+  "operatingSystem": "Windows",
+  "applicationCategory": "DeveloperApplication",
+  "applicationSubCategory": "QA and Test Management Software",
+  "description": "QAlchemy turns user stories and acceptance criteria into complete QA test suites: requirement summaries, risk assessments, test cases, and traceability matrices, using the AI provider of your choice.",
+  "softwareVersion": "1.3.0",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "url": "https://qalchemy.vercel.app/",
+  "downloadUrl": "https://qalchemy.vercel.app/downloads.html",
+  "screenshot": "https://qalchemy.vercel.app/assets/screenshots/dashboard.png"
+}
+</script>
 </head>
 <body>
 
-<div class="aurora"><span></span><span></span><span></span></div>
-<div class="noise"></div>
+<header class="site-nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">
+      <img src="assets/qalchemy-logo.png" alt="QAlchemy logo">
+      QAlchemy
+    </a>
+    <nav class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="downloads.html">Downloads</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="docs.html">Docs</a>
+      <a href="changelog.html">Changelog</a>
+      <a href="about.html">About</a>
+    <a href="downloads.html" class="btn btn-primary mobile-cta">Download QAlchemy</a>
+    </nav>
+    <div class="nav-right">
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <button class="theme-btn" id="themeToggle" aria-label="Toggle dark mode">
+        <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg id="iconSun" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <a href="downloads.html" class="btn btn-primary">Download</a>
+    </div>
+  </div>
+</header>
 
 <main>
-  <svg class="logo" width="72" height="72" viewBox="0 0 40 40" fill="none">
-    <defs><linearGradient id="mark" x1="3" y1="3" x2="37" y2="37" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs>
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M20 3C10.6112 3 3 10.6112 3 20C3 29.3888 10.6112 37 20 37C29.3888 37 37 29.3888 37 20C37 10.6112 29.3888 3 20 3ZM20 12C15.5817 12 12 15.5817 12 20C12 24.4183 15.5817 28 20 28C24.4183 28 28 24.4183 28 20C28 15.5817 24.4183 12 20 12Z" fill="url(#mark)"/>
-    <path d="M22 22L38 22L38 38L22 38Z" fill="url(#mark)"/>
-  </svg>
 
-  <div class="title-block">
-    <h1>QAlchemy</h1>
-    <p class="tagline">The all-in-one toolbox for Quality Engineers.</p>
-  </div>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="badge"><span class="dot"></span>AI-Powered Test Case Generation for QA Engineers</span>
+        <h1>Turn Requirements Into <span class="grad">Complete QA Test Suites</span> in Minutes</h1>
+        <p class="lead">One requirement in, full QA coverage out: summaries, risk, test cases, traceability.</p>
+        <div class="hero-actions">
+          <a href="downloads.html" class="btn btn-primary btn-lg">
+            Download QAlchemy
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12m0 0l4-4m-4 4l-4-4M4 21h16"/></svg>
+          </a>
+          <a href="gallery.html" class="btn btn-ghost btn-lg">View Gallery</a>
+        </div>
+        <p class="hero-note">Desktop-first. Local workspace. Bring your own AI provider.</p>
+      </div>
 
-  <div class="badge">
-    <span class="badge-dot"></span>
-    <span class="badge-label">Coming Soon</span>
-  </div>
+      <div class="hero-visual reveal">
+        <div class="hero-stack">
+          <div class="stack-shot stack-back-2">
+            <img src="assets/screenshots/suites.png" alt="QAlchemy Test Suites screen">
+          </div>
+          <div class="stack-shot stack-back-1">
+            <img src="assets/screenshots/results-overview.png" alt="QAlchemy AI analysis overview">
+          </div>
+          <div class="hero-shot-main">
+            <div class="browserbar">
+              <div class="dots"><span></span><span></span><span></span></div>
+              <div class="urlbar">QAlchemy: Generate Test Cases</div>
+              <div style="width:40px"></div>
+            </div>
+            <img src="assets/screenshots/generate.png" alt="QAlchemy Generate Test Cases screen">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <p class="footnote">Freeware (Closed Source) · © <span id="year"></span> Bryle Briones</p>
+  <!-- TRUSTED AI PROVIDERS -->
+  <section class="providers-strip">
+    <div class="wrap">
+      <p>Choose the AI model that works best for your workflow.</p>
+      <div class="provider-row reveal">
+        <span class="provider-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l1.8 5.6L19.5 9l-5.7 1.4L12 16l-1.8-5.6L4.5 9l5.7-1.4z"/></svg>
+          Anthropic
+        </span>
+        <span class="provider-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M8 12a4 4 0 118 0 4 4 0 01-8 0z"/></svg>
+          OpenAI
+        </span>
+        <span class="provider-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l2.4 6.6L21 12l-6.6 2.4L12 21l-2.4-6.6L3 12l6.6-2.4z"/></svg>
+          Gemini
+        </span>
+        <span class="provider-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 9h.01M15 9h.01M9 15c1 1 5 1 6 0"/></svg>
+          Ollama
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREENSHOT SHOWCASE -->
+  <section id="showcase">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Product Tour</span>
+        <h2>One workspace, start to finish</h2>
+        <p>From a raw requirement to executed, evidenced test coverage, here's the full workflow.</p>
+      </div>
+
+      <div class="showcase-row reveal">
+        <div class="showcase-text">
+          <span class="kicker">Generate Test Cases</span>
+          <h3>Describe it once. Get full coverage back.</h3>
+          <p>Convert user stories and acceptance criteria into structured QA documentation with a single AI request.</p>
+          <ul class="showcase-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Classic or Gherkin/BDD output format</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Choose which testing categories matter</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Works with your own Anthropic, OpenAI, Gemini, or Ollama key</li>
+          </ul>
+        </div>
+        <div class="showcase-media"><img src="assets/screenshots/generate.png" alt="Generate Test Cases page"></div>
+      </div>
+
+      <div class="showcase-row reverse reveal">
+        <div class="showcase-text">
+          <span class="kicker">AI Analysis Report</span>
+          <h3>More than test cases: a full analysis.</h3>
+          <p>Every generation returns a structured report you can bring straight into a review.</p>
+          <ul class="showcase-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Requirement Summary &amp; Business Rules</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Requirement Gaps &amp; Risk Assessment</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> High-Level Scenarios &amp; Traceability Matrix</li>
+          </ul>
+        </div>
+        <div class="showcase-media"><img src="assets/screenshots/results-overview.png" alt="AI Analysis Report overview"></div>
+      </div>
+
+      <div class="showcase-row reveal">
+        <div class="showcase-text">
+          <span class="kicker">Detailed Test Cases</span>
+          <h3>Every case, fully structured.</h3>
+          <p>Generate comprehensive test cases ready to execute or hand off to your team.</p>
+          <ul class="showcase-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Preconditions &amp; test data</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Expected results &amp; priorities</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Gherkin/BDD support</li>
+          </ul>
+        </div>
+        <div class="showcase-media"><img src="assets/screenshots/results-test-cases.png" alt="Detailed test case list"></div>
+      </div>
+
+      <div class="showcase-row reverse reveal">
+        <div class="showcase-text">
+          <span class="kicker">Test Suites Management</span>
+          <h3>Review, refine, organize.</h3>
+          <p>A dedicated workspace to manage every generated suite with AI-assisted insight.</p>
+          <ul class="showcase-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Edit and organize generated suites</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> AI insights &amp; coverage analysis</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Bulk actions &amp; reordering</li>
+          </ul>
+        </div>
+        <div class="showcase-media"><img src="assets/screenshots/suites.png" alt="Test Suites management page"></div>
+      </div>
+
+      <div class="showcase-row reveal">
+        <div class="showcase-text">
+          <span class="kicker">Test Execution Workspace</span>
+          <h3>Run it for real.</h3>
+          <p>Execute generated test suites and keep a live record of every run.</p>
+          <ul class="showcase-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Test runs with environment tracking</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Pass/Fail recording &amp; progress tracking</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Full execution history</li>
+          </ul>
+        </div>
+        <div class="showcase-media"><img src="assets/screenshots/executor.png" alt="Test execution workspace"></div>
+      </div>
+
+      <div class="showcase-row reverse reveal">
+        <div class="showcase-text">
+          <span class="kicker">Evidence Vault</span>
+          <h3>Proof of testing, organized.</h3>
+          <p>Store and manage screenshots, recordings, and documents attached during testing.</p>
+          <ul class="showcase-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Organized into cases, not folders</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Pin the evidence you reach for most</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Preview, zoom, and export</li>
+          </ul>
+        </div>
+        <div class="showcase-media"><img src="assets/screenshots/evidence.png" alt="Evidence Vault page"></div>
+      </div>
+
+      <div class="showcase-row reveal">
+        <div class="showcase-text">
+          <span class="kicker">QA Toolbox</span>
+          <h3>Everyday utilities, fully offline.</h3>
+          <p>A collection of offline utilities for everyday QA work, and nothing leaves your machine.</p>
+          <ul class="showcase-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> JSON Formatter, JSON Diff, Regex Tester, JWT Decoder</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Timestamp Converter, Test Data &amp; UUID Generators</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Boundary Values, Bug Report Template, File Generator, Media Compressor</li>
+          </ul>
+        </div>
+        <div class="showcase-media"><img src="assets/screenshots/toolbox.png" alt="QA Toolbox utilities"></div>
+      </div>
+
+      <div style="text-align:center; margin-top:24px;">
+        <a href="gallery.html" class="btn btn-ghost btn-lg">View Full Gallery</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY QALCHEMY -->
+  <section style="background: var(--bg-subtle); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Why QAlchemy</span>
+        <h2>Built for how QA engineers actually work</h2>
+      </div>
+      <div class="card-grid reveal">
+        <div class="feature-card">
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
+          <h3>Complete QA Analysis</h3>
+          <p>Generate much more than test cases and get the full analysis behind them.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0l4-4m-4 4l-4-4M4 21h16"/></svg></div>
+          <h3>Structured Documentation</h3>
+          <p>Export your work in multiple industry formats, ready for any tool.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></div>
+          <h3>Manual + AI Workflow</h3>
+          <p>Review and edit generated test cases before execution, so you stay in control.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg></div>
+          <h3>Desktop-First Experience</h3>
+          <p>Everything is designed around a local workspace experience.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a4 4 0 015 5l-1.4 1.4M9.3 17.7a4 4 0 01-5-5l1.4-1.4"/><path d="M8 16l8-8"/></svg></div>
+          <h3>Flexible AI Providers</h3>
+          <p>Use Anthropic, OpenAI, Gemini, or Ollama, whichever fits your workflow.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 11-3-6.7M21 4v5h-5"/></svg></div>
+          <h3>Backup and Restore</h3>
+          <p>Protect and restore your QA workspace anytime, on your own terms.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPORT FORMATS -->
+  <section>
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Export Anywhere</span>
+        <h2>Speaks the format your team already uses</h2>
+      </div>
+      <div class="export-grid reveal">
+        <div class="export-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 3v18M3 9h18"/></svg></div><span>Excel</span></div>
+        <div class="export-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div><span>Azure DevOps</span></div>
+        <div class="export-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h14v16l-7-4-7 4z"/></svg></div><span>Jira / Xray</span></div>
+        <div class="export-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div><span>TestRail</span></div>
+        <div class="export-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div><span>Markdown</span></div>
+        <div class="export-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h10M4 17h13"/></svg></div><span>CSV</span></div>
+        <div class="export-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3h8l4 4v14H4V3z"/><path d="M9 12h6M9 16h6"/></svg></div><span>JSON</span></div>
+        <div class="export-card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2h9l3 3v17H6z"/><path d="M9 12h6M9 16h4"/></svg></div><span>PDF Test Plan</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section style="background: var(--bg-subtle); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">How It Works</span>
+        <h2>Requirement in, evidence out</h2>
+      </div>
+      <div class="steps reveal">
+        <div class="step">
+          <div class="num">1</div>
+          <h4>Provide</h4>
+          <p>Provide your requirement and acceptance criteria.</p>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <h4>Generate</h4>
+          <p>Generate a complete QA analysis report.</p>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <h4>Organize</h4>
+          <p>Review and organize test suites.</p>
+        </div>
+        <div class="step">
+          <div class="num">4</div>
+          <h4>Execute</h4>
+          <p>Execute tests and collect evidence.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section id="download">
+    <div class="wrap">
+      <div class="cta-band reveal">
+        <h2>Spend Less Time Writing Test Cases. Spend More Time Testing.</h2>
+        <p>Generate, organize, execute, and document your QA process from one desktop workspace.</p>
+        <div class="hero-actions">
+          <a href="downloads.html" class="btn btn-primary btn-lg">Download QAlchemy</a>
+          <a href="docs.html" class="btn btn-ghost btn-lg">View Documentation</a>
+        </div>
+        <p style="margin-top:16px; font-size:0.85rem; opacity:.85;">Windows 64-bit &middot; v1.3.0 &middot; .exe and .msi available</p>
+      </div>
+    </div>
+  </section>
+
 </main>
 
-<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <a href="index.html" class="brand" style="margin-bottom:14px;">
+          <img src="assets/qalchemy-logo.png" alt="QAlchemy logo">
+          QAlchemy
+        </a>
+        <p style="color: var(--fg-muted); font-size:0.9rem; max-width:280px; margin-top:12px;">AI-powered testing workspace for software quality engineers.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Product</h5>
+        <ul>
+          <li><a href="downloads.html">Downloads</a></li>
+          <li><a href="index.html#showcase">Product Tour</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="changelog.html">Release Notes</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Resources</h5>
+        <ul>
+          <li><a href="docs.html">Documentation</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="docs.html#doc-faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
+          <li><a href="https://ko-fi.com/buraizuuu" target="_blank" rel="noopener noreferrer">Support on Ko-fi</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>&copy; 2026 QAlchemy. AI-powered testing workspace for software quality engineers.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
 </body>
 </html>

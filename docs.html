@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Documentation | QAlchemy</title>
+<meta name="description" content="The complete QAlchemy guide: getting started, connecting an AI provider, generating test cases, managing suites, exporting, executing runs, and the QA Toolbox.">
+<link rel="canonical" href="https://qalchemy.vercel.app/docs.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="QAlchemy">
+<meta property="og:title" content="Documentation | QAlchemy">
+<meta property="og:description" content="The complete QAlchemy guide: getting started, connecting an AI provider, generating test cases, managing suites, exporting, executing runs, and the QA Toolbox.">
+<meta property="og:url" content="https://qalchemy.vercel.app/docs.html">
+<meta property="og:image" content="https://qalchemy.vercel.app/assets/screenshots/dashboard.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Documentation | QAlchemy">
+<meta name="twitter:description" content="The complete QAlchemy guide: getting started, connecting an AI provider, generating test cases, managing suites, exporting, executing runs, and the QA Toolbox.">
+<meta name="twitter:image" content="https://qalchemy.vercel.app/assets/screenshots/dashboard.png">
+<meta name="theme-color" content="#3d5afe">
+<link rel="icon" href="assets/qalchemy-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="wrap">
+    <a href="index.html" class="brand">
+      <img src="assets/qalchemy-logo.png" alt="QAlchemy logo">
+      QAlchemy
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="downloads.html">Downloads</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="docs.html" class="active">Docs</a>
+      <a href="changelog.html">Changelog</a>
+      <a href="about.html">About</a>
+    <a href="downloads.html" class="btn btn-primary mobile-cta">Download QAlchemy</a>
+    </nav>
+    <div class="nav-right">
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <button class="theme-btn" id="themeToggle" aria-label="Toggle dark mode">
+        <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg id="iconSun" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <a href="downloads.html" class="btn btn-primary">Download</a>
+    </div>
+  </div>
+</header>
+
+<div class="page-header">
+  <div class="wrap">
+    <span class="kicker">Documentation</span>
+    <h1>The complete QAlchemy guide</h1>
+    <p>Everything you need to go from a blank requirement to a fully evidenced, executed test suite.</p>
+  </div>
+</div>
+
+<main class="wrap docs-shell">
+  <aside class="docs-toc" id="toc">
+    <span class="toc-title">Get Started</span>
+    <a href="#doc-intro">Introduction</a>
+    <a href="#doc-install">Getting Started</a>
+    <a href="#doc-ai-keys">Connecting an AI Provider</a>
+
+    <span class="toc-title">Core Workflow</span>
+    <a href="#doc-generate">1. Generate Test Cases</a>
+    <a href="#doc-suites">2. Manage Test Suites</a>
+    <a href="#doc-export">3. Export</a>
+    <a href="#doc-executor">4. Execute Suites</a>
+    <a href="#doc-vault">5. Evidence Vault</a>
+
+    <span class="toc-title">Toolbox</span>
+    <a href="#doc-toolbox">QA Toolbox Reference</a>
+
+    <span class="toc-title">Reference</span>
+    <a href="#doc-backup">Backup &amp; Restore</a>
+    <a href="#doc-faq">FAQ &amp; Troubleshooting</a>
+  </aside>
+
+  <div class="docs-content">
+
+    <article id="doc-intro">
+      <h2><span class="docs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l1.8 5.6L19.5 9l-5.7 1.4L12 16l-1.8-5.6L4.5 9l5.7-1.4z"/></svg></span> Introduction</h2>
+      <p class="docs-sub">What QAlchemy is, and the problem it solves.</p>
+      <p>QAlchemy takes a user story and acceptance criteria and turns it into a complete QA analysis in a single AI request: a requirement summary, extracted business rules, a risk assessment, generated test scenarios and cases, and a traceability matrix linking every case back to its source requirement.</p>
+      <p>From there, the same suite can be organized, exported to the format your team uses, executed with real Pass/Fail tracking, and backed by attached evidence, so a completed test run is a defensible record, not just a checkbox.</p>
+      <div class="docs-callout">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v5h1"/></svg>
+        <span>QAlchemy is a desktop-first workspace. Your requirements, generated suites, execution history, and evidence stay in a local workspace on your machine.</span>
+      </div>
+    </article>
+
+    <article id="doc-install">
+      <h2><span class="docs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0l4-4m-4 4l-4-4M4 21h16"/></svg></span> Getting Started</h2>
+      <p class="docs-sub">Get QAlchemy running in under two minutes.</p>
+      <ol>
+        <li><a href="downloads.html" style="color:var(--primary); text-decoration:underline;">Download the desktop app</a> for your platform.</li>
+        <li>Launch it. QAlchemy sets up your local workspace automatically, with no external database or account required.</li>
+        <li>Complete the one-time setup screen to connect an AI provider (see below).</li>
+      </ol>
+      <div class="docs-media"><img src="assets/screenshots/settings.png" alt="QAlchemy settings screen"></div>
+    </article>
+
+    <article id="doc-ai-keys">
+      <h2><span class="docs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span> Connecting an AI Provider</h2>
+      <p class="docs-sub">QAlchemy is bring-your-own-key: it never bundles or resells model access.</p>
+      <p>Open <strong>Settings → AI Provider</strong> and choose one:</p>
+      <ul>
+        <li><strong>Anthropic (Claude)</strong>: a strong default for the generation pipeline.</li>
+        <li><strong>OpenAI</strong>: GPT-family models via your own API key.</li>
+        <li><strong>Google Gemini</strong>: via your own API key.</li>
+        <li><strong>Ollama</strong>: point at a local Ollama server for fully offline, self-hosted generation.</li>
+      </ul>
+      <p>Keys are stored locally on your device and are sent only to the provider you selected, never anywhere else.</p>
+    </article>
+
+    <article id="doc-generate">
+      <h2><span class="docs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l1.8 5.6L19.5 9l-5.7 1.4L12 16l-1.8-5.6L4.5 9l5.7-1.4z"/></svg></span> 1. Generate Test Cases</h2>
+      <p class="docs-sub">From requirement to structured QA analysis in one request.</p>
+      <ol>
+        <li>Open <strong>Generate Test Cases</strong>.</li>
+        <li>Provide your <strong>user story</strong> and <strong>acceptance criteria</strong>: plain text is fine.</li>
+        <li>Choose an output format: <strong>Classic</strong> (structured steps/expected results) or <strong>Gherkin/BDD</strong> (Given/When/Then).</li>
+        <li>Select which testing categories apply: functional, negative, boundary, security, accessibility, and more.</li>
+        <li>Generate. QAlchemy returns a requirement summary, business rules, risk assessment, scenarios/cases, and a traceability matrix.</li>
+      </ol>
+      <div class="docs-media"><img src="assets/screenshots/generate.png" alt="QAlchemy Generate Test Cases screen"></div>
+      <div class="docs-callout">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v5h1"/></svg>
+        <span>Narrower, well-scoped acceptance criteria produce tighter, more relevant suites than a vague one-line story.</span>
+      </div>
+    </article>
+
+    <article id="doc-suites">
+      <h2><span class="docs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></span> 2. Manage Test Suites</h2>
+      <p class="docs-sub">Review, edit, and clean up generated coverage before it ships.</p>
+      <ul>
+        <li>Browse and edit generated suites in one workspace.</li>
+        <li>Run <strong>AI Insights</strong> to flag likely duplicate cases and coverage gaps.</li>
+        <li>Use bulk actions to re-categorize or re-prioritize multiple cases at once.</li>
+        <li>Reorder cases to match your preferred execution order.</li>
+      </ul>
+      <div class="docs-media"><img src="assets/screenshots/suites.png" alt="QAlchemy Test Suites screen"></div>
+    </article>
+
+    <article id="doc-export">
+      <h2><span class="docs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0l4-4m-4 4l-4-4M4 21h16"/></svg></span> 3. Export</h2>
+      <p class="docs-sub">Get your suite into the tools your team already uses.</p>
+      <p>From any suite, choose <strong>Export</strong> and pick a format:</p>
+      <ul>
+        <li><strong>Excel</strong>: full suite with categories, priority, and steps.</li>
+        <li><strong>Azure DevOps</strong>: column mapping ready for direct import.</li>
+        <li><strong>Jira / Xray</strong>: compatible with Xray test case import.</li>
+        <li><strong>TestRail</strong></li>
+        <li><strong>Markdown</strong> and <strong>CSV</strong>: for docs or spreadsheet tools.</li>
+        <li><strong>JSON</strong>: for custom pipelines.</li>
+        <li><strong>PDF Test Plan</strong>: a formatted, shareable document.</li>
+      </ul>
+      <div class="docs-media"><img src="assets/screenshots/results-test-cases.png" alt="QAlchemy test case list ready for export"></div>
+    </article>
+
+    <article id="doc-executor">
+      <h2><span class="docs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18l6-6-6-6"/><path d="M4 21h16"/></svg></span> 4. Execute Suites</h2>
+      <p class="docs-sub">Turn a generated suite into a real, trackable test run.</p>
+      <ol>
+        <li>Open <strong>Executions</strong> and start a new run.</li>
+        <li>Pick the suite to execute and fill in environment, build, and tester details.</li>
+        <li>Work through each case, marking it <strong>Pass</strong>, <strong>Fail</strong>, <strong>Blocked</strong>, or <strong>No Run</strong>.</li>
+        <li>Track progress live: pass rate, blockers, and cases remaining.</li>
+        <li>Reopen any completed run later to add notes or re-verify a fix.</li>
+      </ol>
+      <div class="docs-media"><img src="assets/screenshots/executor.png" alt="QAlchemy execution workspace"></div>
+    </article>
+
+    <article id="doc-vault">
+      <h2><span class="docs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 4v5c0 4.4-3 8-7 9-4-1-7-4.6-7-9V7z"/></svg></span> 5. Evidence Vault</h2>
+      <p class="docs-sub">Attach proof of testing so a "Pass" is backed by something concrete.</p>
+      <ol>
+        <li>Open the <strong>Evidence Vault</strong> and create a case, a named container for related evidence rather than a folder.</li>
+        <li>Pin frequently used cases to the top.</li>
+        <li>Attach screenshots, screen recordings, or documents as you test.</li>
+        <li>Preview, zoom, rotate, and download evidence directly from the vault.</li>
+      </ol>
+      <div class="docs-media"><img src="assets/screenshots/evidence.png" alt="QAlchemy Evidence Vault"></div>
+    </article>
+
+    <article id="doc-toolbox">
+      <h2><span class="docs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a4 4 0 015 5l-1.4 1.4M9.3 17.7a4 4 0 01-5-5l1.4-1.4"/><path d="M8 16l8-8"/></svg></span> QA Toolbox Reference</h2>
+      <p class="docs-sub">Offline utilities that make no AI calls and no network round-trip.</p>
+      <ul>
+        <li><strong>JSON Formatter / Diff</strong>: pretty-print, validate, and diff two JSON payloads.</li>
+        <li><strong>Regex Tester</strong>: live match highlighting against sample text.</li>
+        <li><strong>JWT Decoder</strong>: inspect header/payload without sending the token anywhere.</li>
+        <li><strong>Timestamp Converter</strong>: Unix, ISO 8601, and locale formats.</li>
+        <li><strong>Test Data Generator</strong>: names, emails, addresses, and structured records.</li>
+        <li><strong>Boundary Values Generator</strong>: min/max/edge values for a given data type.</li>
+        <li><strong>UUID Generator</strong>: v4 UUIDs, single or bulk.</li>
+        <li><strong>Bug Report Template</strong>: a structured starting point for consistent bug reports.</li>
+        <li><strong>File Generator</strong>: dummy files of a given type and size for upload/limit testing.</li>
+        <li><strong>Media Compressor</strong>: local image/video compression; nothing uploads.</li>
+      </ul>
+      <div class="docs-media"><img src="assets/screenshots/toolbox.png" alt="QAlchemy QA Toolbox"></div>
+    </article>
+
+    <article id="doc-backup">
+      <h2><span class="docs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 11-3-6.7M21 4v5h-5"/></svg></span> Backup &amp; Restore</h2>
+      <p class="docs-sub">Your workspace, protected on your own terms.</p>
+      <p>Download a full backup of your workspace on demand, or turn on auto-backup to a folder of your choice at a set interval. Restore from any backup file at any time. Backups never include your AI provider keys.</p>
+    </article>
+
+    <article id="doc-faq">
+      <h2><span class="docs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 015 .5c0 1.7-2.5 1.7-2.5 3.5M12 17h.01"/></svg></span> FAQ &amp; Troubleshooting</h2>
+      <h3>Does my data leave my machine?</h3>
+      <p>Your suites, runs, and evidence stay in your local workspace. The only outbound traffic is the requirement text sent to whichever AI provider you configured, using your own key.</p>
+      <h3>Can I use QAlchemy without an internet connection?</h3>
+      <p>The QA Toolbox works fully offline. Generation requires a connection to your chosen AI provider, unless you're running a local Ollama server.</p>
+      <h3>What if a generated suite needs adjusting?</h3>
+      <p>Re-run Generate with more specific acceptance criteria, or edit the returned cases directly in Test Suites; nothing is locked after generation.</p>
+      <h3>Can I import an existing suite instead of generating one?</h3>
+      <p>Yes, import from any of the supported export formats (Excel, CSV, JSON) via Test Suites.</p>
+    </article>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <a href="index.html" class="brand" style="margin-bottom:14px;">
+          <img src="assets/qalchemy-logo.png" alt="QAlchemy logo">
+          QAlchemy
+        </a>
+        <p style="color: var(--fg-muted); font-size:0.9rem; max-width:280px; margin-top:12px;">AI-powered testing workspace for software quality engineers.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Product</h5>
+        <ul>
+          <li><a href="downloads.html">Downloads</a></li>
+          <li><a href="index.html#showcase">Product Tour</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="changelog.html">Release Notes</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Resources</h5>
+        <ul>
+          <li><a href="docs.html">Documentation</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="docs.html#doc-faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
+          <li><a href="https://ko-fi.com/buraizuuu" target="_blank" rel="noopener noreferrer">Support on Ko-fi</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>&copy; 2026 QAlchemy. AI-powered testing workspace for software quality engineers.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

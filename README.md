@@ -2,11 +2,9 @@
 
 # QAlchemy — Marketing Website
 
-**AI Powered Test Case Generation, presented.**
+**AI-powered test case generation, presented.**
 
-[![Live Site](https://img.shields.io/badge/Live-qalchemy.app-2563eb?logo=vercel&logoColor=white)](https://qalchemy-website.vercel.app)
-[![QAlchemy App](https://img.shields.io/badge/App-Buraizuuu%2Fqalchemy-000000?logo=github&logoColor=white)](https://github.com/Buraizuuu/qalchemy)
-[![MIT License](https://img.shields.io/badge/License-MIT-06B6D4)](#license)
+[![Live Site](https://img.shields.io/badge/Live-qalchemy.vercel.app-2563eb?logo=vercel&logoColor=white)](https://qalchemy.vercel.app)
 
 </div>
 
@@ -14,54 +12,63 @@
 
 ## What this is
 
-This repository holds the public landing page for **[QAlchemy](https://github.com/Buraizuuu/qalchemy)** — the open source, AI powered test case generator. It's a single static page designed to look and feel like a premium commercial SaaS product (in the spirit of Linear, Vercel, Stripe, and Raycast) while accurately representing an open source project.
+This repository holds the public marketing site for **QAlchemy**, a closed-source, local-first desktop QA workspace. It's a static, multi-page site designed to look and feel like a premium commercial SaaS product (in the spirit of Linear, Vercel, and Raycast) while accurately representing a desktop application — no cloud service or open-source claims.
 
-The page exists to do three things:
+Every screenshot on this site is captured directly from the running app, never mocked up.
 
-1. Explain what QAlchemy does in one screen, without jargon.
-2. Show the real product — every screenshot on this page is captured directly from the running app, never mocked up.
-3. Convert visitors into GitHub stars, downloads, and contributors.
+## Pages
+
+| Page | Purpose |
+|---|---|
+| `index.html` | Landing page: hero, product tour, feature grid, export formats, how it works |
+| `downloads.html` | Windows installers (.exe / .msi), SmartScreen guidance, VirusTotal scan result |
+| `gallery.html` | Full-size screenshot gallery of every core workspace |
+| `docs.html` | Complete product guide with sticky sidebar navigation |
+| `changelog.html` | Version history and release notes |
+| `about.html` | Why QAlchemy exists, its principles, and creator/support links |
+| `privacy.html` | Privacy policy |
+| `terms.html` | Terms of service |
 
 ## Tech
 
 No framework, no build step, no package manager. Just:
 
-- **HTML5** — single `index.html`
-- **Tailwind CSS** via CDN
-- **Vanilla JavaScript** — scroll reveals, magnetic buttons, spotlight hover, animated counters, lightbox, mobile nav
-- **Google Fonts** — Space Grotesk (display) + Inter (body)
+- **HTML5** — one file per page, shared header/footer markup
+- **Plain CSS** (`assets/css/main.css`) — design tokens (OKLCH colors), glassmorphism, dark mode via `prefers-color-scheme` + manual toggle
+- **Vanilla JavaScript** (`assets/js/main.js`) — theme toggle, scroll-reveal animations, mobile nav, page-transition fade, docs TOC scroll-spy
+- **Google Fonts** — Sora (display) + Inter (body) + JetBrains Mono
 
-Open `index.html` directly in a browser, or serve the folder with anything static (`npx serve`, `python -m http.server`, Vercel, Netlify, GitHub Pages). There is nothing to install and nothing to compile.
+Open any `.html` file directly in a browser, or serve the folder with anything static (`npx serve`, `python -m http.server`, Vercel, Netlify, GitHub Pages). There is nothing to install and nothing to compile.
 
 ## Project structure
 
 ```
 .
-├── index.html               Entire page: markup, styles, and scripts
-└── assets/
-    ├── screenshots/          Real captures from the QAlchemy app (dashboard, generate,
-    │                         results, suites, settings)
-    ├── logo.svg               QAlchemy wordmark (light)
-    ├── logo-dark.svg          QAlchemy wordmark (dark)
-    └── favicon.svg            Browser tab icon
+├── index.html, downloads.html, gallery.html, docs.html,
+│   changelog.html, about.html, privacy.html, terms.html
+├── downloads/                Windows installers (.exe, .msi)
+├── assets/
+│   ├── css/main.css           Shared design system
+│   ├── js/main.js             Shared behavior
+│   ├── screenshots/           Real captures from the QAlchemy app
+│   ├── qalchemy-logo.png      App icon / brand mark
+│   └── creator.JPG            Creator photo (About page)
+├── robots.txt
+└── sitemap.xml
 ```
 
-## Keeping this page honest
+## Keeping this site honest
 
-This site only advertises features that are actually shipped in the QAlchemy app. Anything not yet built lives in the **Coming Soon** section, clearly separated from the feature grid. When the product changes:
+This site only advertises features that are actually shipped in the QAlchemy desktop app, and does not reference source code, repositories, or open-source licensing — the app is closed-source freeware. When the product changes:
 
-- **Screenshots** — recapture from the running app and drop the updated PNGs into `assets/screenshots/`, replacing the old files with the same names.
-- **Feature copy** — cross check against [`QAlchemy`'s README and `PROJECT_MEMORY.md`](https://github.com/Buraizuuu/qalchemy) before adding a claim to the feature grid or hero.
-- **Roadmap** — move an item out of "Coming Soon" and into the feature grid only once it has actually shipped.
+- **Screenshots** — recapture from the running app (dark mode, real data) and drop the updated PNGs into `assets/screenshots/`, replacing the old files with the same names.
+- **Installers** — rebuild via the app's `npm run build:tauri`, then replace the files in `downloads/` and update the version/size text on `downloads.html`, `index.html`, and `changelog.html`.
+- **Feature copy** — cross-check against the app's own docs before adding a claim to the feature grid or hero.
 
 ## Deployment
 
-This site is deployed on [Vercel](https://vercel.com) as a static site with zero build configuration. Pushing to `main` deploys automatically.
+This site is deployed on [Vercel](https://vercel.com) as a static site with zero build configuration. Pushing to `master` deploys automatically.
 
 ## Support
 
-QAlchemy is free and open source. If it saves your team time, you can support continued development via the **Buy me a coffee** link on the site (Ko-fi).
-
-## License
-
-MIT — see the [QAlchemy repository](https://github.com/Buraizuuu/qalchemy) for the application license. This marketing site's own code is likewise MIT licensed.
+QAlchemy is built and maintained independently. If it saves you time, you can support continued development via the **Ko-fi** link on the site.
