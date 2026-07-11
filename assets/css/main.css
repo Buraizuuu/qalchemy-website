@@ -437,8 +437,26 @@ footer{ border-top:1px solid var(--border); padding: 56px 0 32px; background: va
 }
 
 /* ---------------- Docs page ---------------- */
-.docs-shell{ display:grid; grid-template-columns: 250px 1fr; gap:52px; align-items:start; padding: 64px 0 120px; }
+.docs-shell{ display:grid; grid-template-columns: 250px 1fr; gap:52px; align-items:start; padding-top:64px; padding-bottom:120px; }
 .docs-toc{ position: sticky; top: calc(var(--nav-h) + 20px); display:flex; flex-direction:column; gap:4px; max-height: calc(100vh - 120px); overflow-y:auto; padding-right:8px; }
+.docs-search{
+  position:relative; display:flex; align-items:center; margin-bottom:14px;
+}
+.docs-search svg{
+  position:absolute; left:12px; width:16px; height:16px; color: var(--fg-faint); pointer-events:none;
+}
+.docs-search input{
+  width:100%; padding:9px 12px 9px 36px; font: inherit; font-size:0.88rem;
+  color: var(--fg); background: var(--surface); border:1px solid var(--border); border-radius:10px;
+  outline:none; transition: border-color .15s ease;
+}
+.docs-search input:focus{ border-color: var(--primary); }
+.docs-search input::placeholder{ color: var(--fg-faint); }
+.docs-search-count{ font-size:0.8rem; color: var(--fg-faint); margin:0 0 8px 2px; }
+.docs-no-results{
+  color: var(--fg-muted); padding:32px 0; font-size:0.98rem;
+}
+mark.docs-hit{ background: var(--primary-tint); color: var(--primary); border-radius:3px; padding:0 2px; }
 .docs-toc .toc-title{ font-size:0.74rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color: var(--fg-faint); margin:16px 0 6px; }
 .docs-toc .toc-title:first-child{ margin-top:0; }
 .docs-toc a{ font-size:0.88rem; color: var(--fg-muted); padding:7px 11px; border-radius:9px; border-left:2px solid transparent; }
@@ -467,6 +485,7 @@ footer{ border-top:1px solid var(--border); padding: 56px 0 32px; background: va
 @media (max-width: 980px){
   .docs-shell{ grid-template-columns: 1fr; }
   .docs-toc{ position:relative; top:0; max-height:none; flex-direction:row; flex-wrap:wrap; margin-bottom:32px; }
+  .docs-search{ width:100%; margin-bottom:6px; }
   .docs-toc .toc-title{ width:100%; margin:6px 0 0; }
 }
 
