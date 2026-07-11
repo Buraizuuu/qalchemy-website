@@ -46,7 +46,7 @@ Open any `.html` file directly in a browser, or serve the folder with anything s
 .
 ├── index.html, downloads.html, gallery.html, docs.html,
 │   changelog.html, about.html, privacy.html, terms.html
-├── downloads/                Windows installers (.exe, .msi)
+├── releases/                 Windows installers (.exe, .msi)
 ├── assets/
 │   ├── css/main.css           Shared design system
 │   ├── js/main.js             Shared behavior
@@ -62,7 +62,7 @@ Open any `.html` file directly in a browser, or serve the folder with anything s
 This site only advertises features that are actually shipped in the QAlchemy desktop app, and does not reference source code, repositories, or open-source licensing — the app is closed-source freeware. When the product changes:
 
 - **Screenshots** — recapture from the running app (dark mode, real data) and drop the updated PNGs into `assets/screenshots/`, replacing the old files with the same names.
-- **Installers** — rebuild via the app's `npm run build:tauri`, then replace the files in `downloads/` and update the version/size text on `downloads.html`, `index.html`, and `changelog.html`.
+- **Installers** — rebuild via the app's `npm run build:tauri`, then replace the files in `releases/` and update the version/size text on `downloads.html`, `index.html`, and `changelog.html`.
 - **Feature copy** — cross-check against the app's own docs before adding a claim to the feature grid or hero.
 
 ## Deployment

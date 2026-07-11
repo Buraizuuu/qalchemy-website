@@ -92,6 +92,27 @@
     revealEls.forEach(function (el) { el.classList.add('is-visible'); });
   }
 
+  // Dynamic copyright year
+  var yearEls = document.querySelectorAll('.js-year');
+  if (yearEls.length) {
+    var currentYear = String(new Date().getFullYear());
+    yearEls.forEach(function (el) { el.textContent = currentYear; });
+  }
+
+  // Back to top
+  var backToTop = document.createElement('button');
+  backToTop.type = 'button';
+  backToTop.className = 'back-to-top';
+  backToTop.setAttribute('aria-label', 'Back to top');
+  backToTop.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 19V5m0 0l-6 6m6-6l6 6"/></svg>';
+  document.body.appendChild(backToTop);
+  backToTop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  });
+  window.addEventListener('scroll', function () {
+    backToTop.classList.toggle('is-visible', window.scrollY > 480);
+  }, { passive: true });
+
   // Docs TOC scroll spy (only present on docs.html)
   var tocLinks = Array.prototype.slice.call(document.querySelectorAll('#toc a'));
   if (tocLinks.length) {
