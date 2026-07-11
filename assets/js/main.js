@@ -4,18 +4,6 @@
   var iconMoon = document.getElementById('iconMoon');
   var iconSun = document.getElementById('iconSun');
 
-  // Smooth cross-page transitions: fade in only once fonts are loaded (avoids
-  // a fallback-font flash that swaps to Sora/Inter mid-fade and looks like
-  // text "enlarging"), fade out before navigating away.
-  function reveal() { document.body.classList.add('page-ready'); }
-  if (document.fonts && document.fonts.ready) {
-    var settled = false;
-    document.fonts.ready.then(function () { if (!settled) { settled = true; reveal(); } });
-    setTimeout(function () { if (!settled) { settled = true; reveal(); } }, 400);
-  } else {
-    requestAnimationFrame(reveal);
-  }
-
   // Mobile nav menu
   var navToggle = document.getElementById('navToggle');
   var navLinks = document.querySelector('.nav-links');
@@ -38,22 +26,6 @@
       }
     });
   }
-
-  document.addEventListener('click', function (e) {
-    var a = e.target.closest('a');
-    if (!a) return;
-    var href = a.getAttribute('href');
-    if (!href || href.charAt(0) === '#') return;
-    if (a.target === '_blank' || a.hasAttribute('download')) return;
-    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    var url;
-    try { url = new URL(href, location.href); } catch (err) { return; }
-    if (url.origin !== location.origin) return;
-
-    e.preventDefault();
-    document.body.classList.remove('page-ready');
-    setTimeout(function () { location.href = url.href; }, 180);
-  });
 
   function applyTheme(t) {
     if (t) root.setAttribute('data-theme', t);
