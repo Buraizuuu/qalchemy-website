@@ -633,3 +633,23 @@ mark.docs-hit{ background: var(--primary-tint); color: var(--primary); border-ra
   .steps{ grid-template-columns: 1fr; }
   .foot-grid{ grid-template-columns: 1fr; }
 }
+@media (max-width: 640px){
+  .foot-grid{ gap:0; }
+  .foot-col{ border-bottom:1px solid var(--border); }
+  .foot-col:first-child{ border-bottom:none; padding-bottom:20px; }
+  .foot-col h5{
+    display:flex; align-items:center; justify-content:space-between; cursor:pointer;
+    margin:0; padding:16px 2px; user-select:none;
+  }
+  .foot-col h5::after{
+    content:'+'; font-size:1.1rem; font-weight:400; color: var(--fg-faint); transition: transform .2s ease;
+  }
+  .foot-col.is-open h5::after{ transform: rotate(45deg); }
+  .foot-col ul{
+    max-height:0; overflow:hidden; gap:0;
+    transition: max-height .25s ease, padding .25s ease;
+  }
+  .foot-col.is-open ul{ max-height:240px; padding-bottom:16px; gap:10px; }
+  .foot-col:first-child h5{ display:none; }
+  .foot-bottom{ margin-top:20px; padding-top:20px; border-top:none; }
+}

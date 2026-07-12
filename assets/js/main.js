@@ -71,6 +71,30 @@
     yearEls.forEach(function (el) { el.textContent = currentYear; });
   }
 
+  // Mobile footer accordion
+  var footCols = document.querySelectorAll('.foot-col');
+  if (footCols.length) {
+    footCols.forEach(function (col) {
+      var heading = col.querySelector('h5');
+      var list = col.querySelector('ul');
+      if (!heading || !list) return;
+      heading.setAttribute('role', 'button');
+      heading.setAttribute('tabindex', '0');
+      heading.setAttribute('aria-expanded', 'false');
+      heading.addEventListener('click', function () {
+        if (!matchMedia('(max-width: 640px)').matches) return;
+        var isOpen = col.classList.toggle('is-open');
+        heading.setAttribute('aria-expanded', String(isOpen));
+      });
+      heading.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          heading.click();
+        }
+      });
+    });
+  }
+
   // Back to top
   var backToTop = document.createElement('button');
   backToTop.type = 'button';
