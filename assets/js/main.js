@@ -216,4 +216,81 @@
       searchTimer = setTimeout(runSearch, 120);
     });
   }
+
+  // Changelog search + expand/collapse (only present on changelog.html)
+  var clSearch = document.getElementById('changelogSearch');
+  var clList = document.querySelector('.changelog-list');
+  if (clSearch && clList) {
+    var releases = Array.prototype.slice.call(clList.querySelectorAll('.release'));
+    var clNoResults = document.getElementById('changelogNoResults');
+    var toggleAllBtn = document.getElementById('changelogToggleAll');
+
+    function clClearHighlights() {
+      Array.prototype.slice.call(clList.querySelectorAll('mark.docs-hit')).forEach(function (m) {
+        var parent = m.parentNode;
+        parent.replaceChild(document.createTextNode(m.textContent), m);
+        parent.normalize();
+      });
+    }
+
+    function clHighlight(el, query) {
+      var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+      var nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(function (node) {
+        if (node.parentNode.closest('summary')) return;
+        var text = node.nodeValue;
+        var idx = text.toLowerCase().indexOf(query);
+        if (idx === -1) return;
+        var frag = document.createDocumentFragment();
+        var rest = text;
+        while (idx !== -1) {
+          frag.appendChild(document.createTextNode(rest.slice(0, idx)));
+          var mark = document.createElement('mark');
+          mark.className = 'docs-hit';
+          mark.textContent = rest.slice(idx, idx + query.length);
+          frag.appendChild(mark);
+          rest = rest.slice(idx + query.length);
+          idx = rest.toLowerCase().indexOf(query);
+        }
+        frag.appendChild(document.createTextNode(rest));
+        node.parentNode.replaceChild(frag, node);
+      });
+    }
+
+    function runClSearch() {
+      var query = clSearch.value.trim().toLowerCase();
+      clClearHighlights();
+      if (!query) {
+        releases.forEach(function (r) { r.style.display = ''; });
+        clNoResults.style.display = 'none';
+        return;
+      }
+      var matches = 0;
+      releases.forEach(function (release) {
+        var hit = release.textContent.toLowerCase().indexOf(query) !== -1;
+        release.style.display = hit ? '' : 'none';
+        if (hit) {
+          matches++;
+          release.open = true;
+          clHighlight(release, query);
+        }
+      });
+      clNoResults.style.display = matches ? 'none' : '';
+    }
+
+    var clSearchTimer;
+    clSearch.addEventListener('input', function () {
+      clearTimeout(clSearchTimer);
+      clSearchTimer = setTimeout(runClSearch, 120);
+    });
+
+    if (toggleAllBtn) {
+      toggleAllBtn.addEventListener('click', function () {
+        var shouldOpen = toggleAllBtn.textContent.indexOf('Expand') === 0;
+        releases.forEach(function (r) { r.open = shouldOpen; });
+        toggleAllBtn.textContent = shouldOpen ? 'Collapse all' : 'Expand all';
+      });
+    }
+  }
 })();

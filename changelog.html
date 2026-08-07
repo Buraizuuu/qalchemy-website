@@ -61,14 +61,30 @@
   </div>
 </div>
 
-<main class="wrap">
+<main class="wrap docs-shell">
+  <aside class="docs-toc changelog-toc" id="toc">
+    <div class="docs-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="search" id="changelogSearch" placeholder="Search changes&hellip;" aria-label="Search changelog" autocomplete="off">
+    </div>
+    <span class="toc-title">Versions</span>
+    <a href="#v1-4">v1.4 <span class="toc-tag">Current</span></a>
+    <a href="#v1-3">v1.3</a>
+    <a href="#v1-2">v1.2</a>
+    <a href="#v1-1">v1.1</a>
+    <a href="#v1-0">v1.0 <span class="toc-tag toc-tag-muted">Launch</span></a>
+    <button type="button" class="changelog-toggle-all" id="changelogToggleAll">Expand all</button>
+  </aside>
+
   <div class="changelog-list">
 
-    <div class="release reveal">
-      <div class="release-head">
+    <details class="release reveal" id="v1-4" open>
+      <summary class="release-head">
+        <svg class="release-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
         <span class="release-version">v1.4</span>
-        <span class="release-date">2026</span>
-      </div>
+        <span class="release-badge release-badge-current">Current</span>
+        <span class="release-date">Aug 2026</span>
+      </summary>
       <ul>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>New one-click <strong>Optimize Suite</strong> action in the AI Insights panel: removes near-duplicate test cases (no AI call) and tops up any requested category still missing test cases, with a review dialog showing exactly what will change before you approve or decline.</span></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>New opt-in <strong>Review Accuracy</strong> AI check: re-checks every existing test case against the original requirement and flags only the ones that genuinely contradict it, for you to review and edit.</span></li>
@@ -79,13 +95,14 @@
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>Ollama now defaults to <code>127.0.0.1</code>, with a friendlier "model not found" error and a local setup/troubleshooting guide.</span></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>Fixed: an in-progress execution run whose Test Suite had been deleted could never be deleted itself.</span></li>
       </ul>
-    </div>
+    </details>
 
-    <div class="release reveal">
-      <div class="release-head">
+    <details class="release reveal" id="v1-3">
+      <summary class="release-head">
+        <svg class="release-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
         <span class="release-version">v1.3</span>
-        <span class="release-date">2026</span>
-      </div>
+        <span class="release-date">Aug 2026</span>
+      </summary>
       <ul>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>New <strong>Knowledge Hub</strong>: a searchable knowledge base for QA documentation (business rules, API docs, SQL snippets, environment setup, known issues, and more). A single navigation tree — search, All Articles, Pinned, and collapsible categories with articles nested directly underneath — next to a full Markdown editor with live split preview, syntax-highlighted code blocks, file attachments you can view or download, and 14 built-in templates.</span></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>Kanban: task type (Task/Bug/Story/Improvement), file attachments, pin-to-top, a clickable summary stats row, and drag-to-reorder within a column.</span></li>
@@ -97,37 +114,40 @@
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>Backup, Restore, and Delete Everything now cover Executions, Evidence Vault (including file attachments), and Knowledge Hub, not just Test Suites and activity.</span></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>Fixed Jira, Azure DevOps, GitHub, and Trello connections failing on the desktop app.</span></li>
       </ul>
-    </div>
+    </details>
 
-    <div class="release reveal">
-      <div class="release-head">
+    <details class="release reveal" id="v1-2">
+      <summary class="release-head">
+        <svg class="release-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
         <span class="release-version">v1.2</span>
-        <span class="release-date">2026</span>
-      </div>
+        <span class="release-date">Aug 2026</span>
+      </summary>
       <ul>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>New <strong>Kanban</strong> board for tracking internal QA tasks and notes, separate from your generated test suites: To Do / In Progress / Done columns, drag-and-drop, priority, labels, due dates, and search.</span></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span><strong>Recycle Bin</strong> extended to Test Suites and Kanban tasks. Deleting either now moves it to a Recycle Bin instead of removing it immediately, kept for 30 days before permanent removal, the same pattern already used by Evidence Vault and Executions.</span></li>
       </ul>
-    </div>
+    </details>
 
-    <div class="release reveal">
-      <div class="release-head">
+    <details class="release reveal" id="v1-1">
+      <summary class="release-head">
+        <svg class="release-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
         <span class="release-version">v1.1</span>
-        <span class="release-date">2026</span>
-      </div>
+        <span class="release-date">Jul 2026</span>
+      </summary>
       <ul>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>Import user stories directly into Generate from <strong>Jira Cloud, Azure DevOps, GitHub Issues, or Trello</strong>. Connect a provider once in Settings, then search and pick a story to pre-fill the form.</span></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>More reliable AI generation: automatic follow-up coverage when a requested test category comes back empty, duplicate-case prevention, and a more consistent acceptance-criteria traceability matrix across providers.</span></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>Rebuilt Excel export with an AC traceability column, a Severity column, and color-coded Priority/Severity/Result.</span></li>
       </ul>
-    </div>
+    </details>
 
-    <div class="release reveal">
-      <div class="release-head">
+    <details class="release reveal" id="v1-0">
+      <summary class="release-head">
+        <svg class="release-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
         <span class="release-version">v1.0</span>
         <span class="release-badge">Official Launch</span>
-        <span class="release-date">2026</span>
-      </div>
+        <span class="release-date">Jul 2026</span>
+      </summary>
       <ul>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>AI-powered test case generation from user stories, acceptance criteria, and business rules, across 11 test categories, in classic structured form or as Gherkin/BDD scenarios.</span></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>The <strong>Test Execution Workspace</strong>: run generated suites with Pass/Fail/Blocked/No Run tracking, environment and build details, and full execution history.</span></li>
@@ -137,7 +157,9 @@
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>Support for Anthropic, OpenAI, Gemini, and Ollama as AI providers. Bring your own key, and nothing is stored server-side.</span></li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>Native desktop app for Windows, built with Tauri, with a real auto-updater and Auto Backup for your workspace.</span></li>
       </ul>
-    </div>
+    </details>
+
+    <p class="changelog-no-results" id="changelogNoResults" style="display:none;">No changes match your search.</p>
 
   </div>
 </main>
