@@ -68,7 +68,8 @@
       <input type="search" id="changelogSearch" placeholder="Search changes&hellip;" aria-label="Search changelog" autocomplete="off">
     </div>
     <span class="toc-title">Versions</span>
-    <a href="#v1-4">v1.4 <span class="toc-tag">Current</span></a>
+    <a href="#v1-5">v1.5 <span class="toc-tag">Current</span></a>
+    <a href="#v1-4">v1.4</a>
     <a href="#v1-3">v1.3</a>
     <a href="#v1-2">v1.2</a>
     <a href="#v1-1">v1.1</a>
@@ -78,11 +79,29 @@
 
   <div class="changelog-list">
 
-    <details class="release reveal" id="v1-4" open>
+    <details class="release reveal" id="v1-5" open>
+      <summary class="release-head">
+        <svg class="release-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
+        <span class="release-version">v1.5</span>
+        <span class="release-badge release-badge-current">Current</span>
+        <span class="release-date">Aug 2026</span>
+      </summary>
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>New <strong>Executions Trends</strong>: a per-suite pass-rate chart across completed runs, plus flaky-test detection with a Dashboard alert card for tests still flapping.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>New AI-powered <strong>File Bug Report</strong> action: drafts a bug report from a failed test execution and files it directly to Jira, Azure DevOps, GitHub, or Trello, attaching any linked evidence automatically.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>New <strong>Defects</strong> and <strong>Risk</strong> dashboards inside Executions: Defects aggregates every bug filed across every suite with suite/module/severity filters; Risk ranks test cases by severity, priority, and failure history, with a "Risk by Feature" heatmap.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>New branded PDF <strong>Execution Summary Report</strong> for a single run.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>Global search (Ctrl+K) now covers Knowledge Hub, Kanban, and Evidence Vault.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>Test Suites can now be imported from a previously exported JSON file; test case IDs are locked after creation.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>Kanban gained an AI-generated board summary. New Toolbox tool: <strong>Alarm</strong>, with a full-screen alert, siren sound, and OS notification.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 13l4 4L19 7"/></svg> <span>Security hardening on the Jira/Azure/Trello attachment endpoints and the Kanban AI summary prompt; fixed a silent export/download failure that could show success even when a save dialog was cancelled.</span></li>
+      </ul>
+    </details>
+
+    <details class="release reveal" id="v1-4">
       <summary class="release-head">
         <svg class="release-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
         <span class="release-version">v1.4</span>
-        <span class="release-badge release-badge-current">Current</span>
         <span class="release-date">Aug 2026</span>
       </summary>
       <ul>
