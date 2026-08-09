@@ -74,6 +74,7 @@
 
     <span class="toc-title">Core Workflow</span>
     <a href="#doc-generate">1. Generate Test Cases</a>
+    <a href="#doc-generate-reasoning" style="padding-left:22px; font-size:0.82rem;">Reasoning &amp; Criteria</a>
     <a href="#doc-suites">2. Manage Test Suites</a>
     <a href="#doc-export">3. Export</a>
     <a href="#doc-executor">4. Execute Suites</a>
@@ -141,6 +142,18 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v5h1"/></svg>
         <span>Narrower, well-scoped acceptance criteria produce tighter, more relevant suites than a vague one-line story.</span>
       </div>
+
+      <h3 id="doc-generate-reasoning">Reasoning and criteria behind generation</h3>
+      <p>Generation follows a fixed rubric rather than a freeform prompt, so the same requirement produces consistently structured coverage:</p>
+      <ul>
+        <li><strong>Test design techniques</strong>: Boundary Value Analysis, Equivalence Partitioning, Decision Table Testing, State Transition Testing, Error Guessing, and Risk-Based prioritization are applied wherever they genuinely fit the requirement, not forced onto every case.</li>
+        <li><strong>Fixed category definitions</strong>: Functional, Negative, Boundary, Validation, API, UI, Integration, Regression, Security, Accessibility, and Exploratory each have a precise, non-overlapping meaning. For example, Negative covers wrong credentials and unauthorized actions, while field-level input rules (blank, format, length) are Validation, a distinct category kept separate so coverage doesn't blur between the two.</li>
+        <li><strong>Required-field validation</strong>: when Validation is requested, every required input field the requirement mentions gets its own blank/required-field case, kept distinct from that same field's format or length checks, since each fails independently with its own error message.</li>
+        <li><strong>Priority vs. severity</strong> are judged as two independent axes, not one scale. Severity is the consequence if the underlying defect exists in production (Critical, Major, Minor, or Trivial); priority is how urgently that specific case should be run (High, Medium, or Low). A cosmetic bug on a page every user sees can be High priority but Minor severity; a rare data-corruption edge case can be Low priority but Critical severity.</li>
+        <li><strong>Automation candidates</strong> are flagged true only when a case is deterministic (the same input always produces the same verifiable output), repeatable without human judgment, and tests a stable surface. Exploratory, visually subjective, or timing-dependent cases are flagged false.</li>
+        <li><strong>Traceability</strong> is built against your acceptance criteria as an explicit checklist: every criterion gets exactly one entry, and a test case only counts as covering it if its expected results directly prove that exact claim, not just something in the same feature or flow.</li>
+        <li><strong>Gaps and risks</strong> are scoped to the requirement in front of it: open questions are limited to what would materially change the test cases (no speculative enterprise concerns invented out of thin air), and each relevant risk area gets a likelihood, an impact, and a concrete mitigation rather than a generic warning.</li>
+      </ul>
     </article>
 
     <article id="doc-suites">
