@@ -159,6 +159,59 @@
 
       <div class="showcase-row reverse reveal">
         <div class="showcase-text">
+          <span class="kicker">Reasoning &amp; Criteria</span>
+          <h3>Not a freeform prompt. A fixed rubric.</h3>
+          <p>The same requirement produces consistently structured coverage every time, because generation follows explicit test design techniques and category definitions instead of guessing.</p>
+          <ul class="showcase-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Priority and severity are judged as two independent axes, never conflated</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Traceability checks that a case's expected results actually prove each acceptance criterion</li>
+          </ul>
+          <a href="docs#doc-generate-reasoning" style="color:var(--primary); text-decoration:underline; font-size:0.92rem; font-weight:600;">See the full rubric in the docs &rarr;</a>
+        </div>
+        <div class="showcase-media rubric-card">
+          <div>
+            <span class="rubric-label">Test design techniques</span>
+            <div class="rubric-chips">
+              <span class="rubric-chip">Boundary Value Analysis</span>
+              <span class="rubric-chip">Equivalence Partitioning</span>
+              <span class="rubric-chip">Decision Table</span>
+              <span class="rubric-chip">State Transition</span>
+              <span class="rubric-chip">Error Guessing</span>
+              <span class="rubric-chip">Risk-Based</span>
+            </div>
+          </div>
+          <div>
+            <span class="rubric-label">Fixed categories</span>
+            <div class="rubric-chips">
+              <span class="rubric-chip">Functional</span>
+              <span class="rubric-chip">Negative</span>
+              <span class="rubric-chip">Boundary</span>
+              <span class="rubric-chip">Validation</span>
+              <span class="rubric-chip">API</span>
+              <span class="rubric-chip">UI</span>
+              <span class="rubric-chip">Integration</span>
+              <span class="rubric-chip">Regression</span>
+              <span class="rubric-chip">Security</span>
+              <span class="rubric-chip">Accessibility</span>
+              <span class="rubric-chip">Exploratory</span>
+            </div>
+          </div>
+          <div class="rubric-axis">
+            <div class="rubric-axis-item">
+              <strong>Severity</strong>
+              <span>Consequence if the defect is real</span>
+            </div>
+            <span class="rubric-axis-sep">&times;</span>
+            <div class="rubric-axis-item">
+              <strong>Priority</strong>
+              <span>How urgently to run this case</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase-row reveal">
+        <div class="showcase-text">
           <span class="kicker">Test Execution Workspace</span>
           <h3>Run it for real.</h3>
           <p>Execute generated test suites and keep a live record of every run, from environment to Pass/Fail.</p>
