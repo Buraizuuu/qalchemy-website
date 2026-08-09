@@ -94,8 +94,8 @@
     <article id="doc-intro">
       <h2><span class="docs-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l1.8 5.6L19.5 9l-5.7 1.4L12 16l-1.8-5.6L4.5 9l5.7-1.4z"/></svg></span> Introduction</h2>
       <p class="docs-sub">What QAlchemy is, and the problem it solves.</p>
-      <p>QAlchemy takes a user story and acceptance criteria and turns it into a complete QA analysis in a single AI request: a requirement summary, extracted business rules, a risk assessment, generated test scenarios and cases, and a traceability matrix linking every case back to its source requirement.</p>
-      <p>From there, the same suite can be organized, exported to the format your team uses, executed with real Pass/Fail tracking, and backed by attached evidence, so a completed test run is a defensible record, not just a checkbox.</p>
+      <p>QAlchemy takes a user story and acceptance criteria and turns it into a complete QA analysis in a single AI request — see <a href="#doc-generate" style="color:var(--primary); text-decoration:underline;">Generate Test Cases</a> below for exactly what comes back.</p>
+      <p>From there, the same suite can be organized, exported to the format your team uses, executed with real Pass/Fail tracking, tracked for trends and risk, and backed by attached evidence, so a completed test run is a defensible record, not just a checkbox.</p>
       <div class="docs-callout">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M11 12h1v5h1"/></svg>
         <span>QAlchemy is a desktop-first workspace. Your requirements, generated suites, execution history, and evidence stay in a local workspace on your machine.</span>
@@ -149,7 +149,9 @@
       <ul>
         <li>Browse and edit generated suites in one workspace.</li>
         <li>Run <strong>AI Insights</strong> to flag likely duplicate cases and coverage gaps.</li>
-        <li>Use bulk actions to re-categorize or re-prioritize multiple cases at once.</li>
+        <li>Run <strong>Optimize Suite</strong> to review AI-suggested test case improvements and approve or decline each one individually.</li>
+        <li>Run <strong>Review Accuracy</strong> to have AI check generated cases against the original requirement for correctness.</li>
+        <li>Use bulk actions to re-categorize, re-prioritize, or delete multiple cases at once.</li>
         <li>Reorder cases to match your preferred execution order.</li>
         <li>Deleted a suite by mistake? Restore it from the Recycle Bin within 30 days.</li>
       </ul>
@@ -183,6 +185,13 @@
         <li>Reopen any completed run later to add notes or re-verify a fix.</li>
       </ol>
       <div class="docs-media"><img src="assets/screenshots/executor.png" alt="QAlchemy execution workspace"></div>
+      <p>Beyond running a suite, Executions also gives you:</p>
+      <ul>
+        <li><strong>File Bug Report</strong>: on a failed case, AI drafts the title, repro steps, and expected/actual results, checks for likely duplicate tickets, then files straight to Jira, Azure DevOps, GitHub, or Trello with evidence attached.</li>
+        <li><strong>Trends</strong>: pass rate charted across every completed run per suite, with tests that flip between pass and fail flagged as Flaky automatically.</li>
+        <li><strong>Defects Dashboard</strong>: every bug filed from a failed execution, rolled up across suites with totals, a filing trend, and breakdowns by suite and severity.</li>
+        <li><strong>Risk Dashboard</strong>: test cases ranked by severity, priority, and failure history, plus a Risk by Feature heatmap, so you know what to test first.</li>
+      </ul>
     </article>
 
     <article id="doc-vault">
@@ -204,6 +213,7 @@
         <li>Open <strong>Kanban</strong> and add a task to To Do, In Progress, or Done.</li>
         <li>Set a priority, add free-form labels, and an optional due date (flagged once overdue).</li>
         <li>Drag a task between columns to update its status, or use search to find one by title, notes, or label.</li>
+        <li>Click <strong>Summarize</strong> for an AI-generated overview of what's currently on the board.</li>
         <li>Deleting a task moves it to the board's Recycle Bin, kept for 30 days before permanent removal.</li>
       </ol>
       <p>The Kanban board is stored locally in your browser rather than the rest of your synced workspace, so it doesn't carry over between devices and isn't included in Backup &amp; Restore.</p>
@@ -232,11 +242,14 @@
         <li><strong>JWT Decoder</strong>: inspect header/payload without sending the token anywhere.</li>
         <li><strong>Timestamp Converter</strong>: Unix, ISO 8601, and locale formats.</li>
         <li><strong>Test Data Generator</strong>: names, emails, addresses, and structured records.</li>
+        <li><strong>Lorem Ipsum Generator</strong>: placeholder text by words, sentences, paragraphs, or character count.</li>
+        <li><strong>Image Test Data Generator</strong>: branded placeholder images by dimensions and file size.</li>
         <li><strong>Boundary Values Generator</strong>: min/max/edge values for a given data type.</li>
         <li><strong>UUID Generator</strong>: v4 UUIDs, single or bulk.</li>
         <li><strong>Bug Report Template</strong>: a structured starting point for consistent bug reports.</li>
         <li><strong>File Generator</strong>: dummy files of a given type and size for upload/limit testing.</li>
         <li><strong>Media Compressor</strong>: local image/video compression; nothing uploads.</li>
+        <li><strong>Alarm</strong>: set a time and get a loud alert with an on-screen banner no matter which page you're on.</li>
       </ul>
       <div class="docs-media"><img src="assets/screenshots/toolbox.png" alt="QAlchemy QA Toolbox"></div>
     </article>
@@ -256,7 +269,7 @@
       <h3>What if a generated suite needs adjusting?</h3>
       <p>Re-run Generate with more specific acceptance criteria, or edit the returned cases directly in Test Suites; nothing is locked after generation.</p>
       <h3>Can I import an existing suite instead of generating one?</h3>
-      <p>Yes, import from any of the supported export formats (Excel, CSV, JSON) via Test Suites.</p>
+      <p>Yes, import a suite from its <strong>JSON</strong> export via Test Suites — the one export format that round-trips with full fidelity.</p>
     </article>
 
   </div>
