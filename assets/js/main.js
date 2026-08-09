@@ -293,4 +293,20 @@
       });
     }
   }
+
+  // Hero screenshot carousel
+  var heroCarousel = document.getElementById('hero-carousel');
+  if (heroCarousel) {
+    var heroImgs = Array.prototype.slice.call(heroCarousel.querySelectorAll('.hero-carousel-img'));
+    var heroLabel = document.getElementById('hero-carousel-label');
+    var heroIndex = 0;
+    if (heroImgs.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setInterval(function () {
+        heroImgs[heroIndex].classList.remove('is-active');
+        heroIndex = (heroIndex + 1) % heroImgs.length;
+        heroImgs[heroIndex].classList.add('is-active');
+        if (heroLabel) heroLabel.textContent = heroImgs[heroIndex].getAttribute('data-label');
+      }, 3800);
+    }
+  }
 })();
