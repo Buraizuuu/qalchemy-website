@@ -160,15 +160,22 @@
       <div class="showcase-row reverse reveal">
         <div class="showcase-text">
           <span class="kicker">Reasoning &amp; Criteria</span>
-          <h3>Not a freeform prompt. A fixed rubric.</h3>
-          <p>The same requirement produces consistently structured coverage every time, because generation follows explicit test design techniques and category definitions instead of guessing.</p>
+          <h3>Not prompt-driven. Methodology-driven.</h3>
+          <p>QAlchemy evaluates each requirement against a version-controlled QA rubric: proven test design techniques, coverage categories, and traceability, instead of freeform generation.</p>
           <ul class="showcase-list">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Priority and severity are judged as two independent axes, never conflated</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Traceability checks that a case's expected results actually prove each acceptance criterion</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Severity and priority are evaluated as independent dimensions</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg> Expected results trace back to the acceptance criteria they validate</li>
           </ul>
-          <a href="docs#doc-generate-reasoning" style="color:var(--primary); text-decoration:underline; font-size:0.92rem; font-weight:600;">See the full rubric in the docs &rarr;</a>
+          <a href="docs#doc-generate-reasoning" style="color:var(--primary); text-decoration:underline; font-size:0.92rem; font-weight:600;">View QA rubric &rarr;</a>
         </div>
         <div class="showcase-media rubric-card">
+          <div class="rubric-think-bar">
+            <span class="rubric-think-dot"></span>
+            <span class="rubric-think-dot"></span>
+            <span class="rubric-think-dot"></span>
+            <span class="rubric-think-text">Evaluating against QA rubric&hellip;</span>
+          </div>
+
           <div>
             <span class="rubric-label">Test design techniques</span>
             <div class="rubric-chips">
@@ -177,11 +184,12 @@
               <span class="rubric-chip">Decision Table</span>
               <span class="rubric-chip">State Transition</span>
               <span class="rubric-chip">Error Guessing</span>
-              <span class="rubric-chip">Risk-Based</span>
+              <span class="rubric-chip">Risk-Based Testing</span>
             </div>
           </div>
+
           <div>
-            <span class="rubric-label">Fixed categories</span>
+            <span class="rubric-label">Coverage categories</span>
             <div class="rubric-chips">
               <span class="rubric-chip">Functional</span>
               <span class="rubric-chip">Negative</span>
@@ -196,15 +204,26 @@
               <span class="rubric-chip">Exploratory</span>
             </div>
           </div>
+
           <div class="rubric-axis">
             <div class="rubric-axis-item">
               <strong>Severity</strong>
-              <span>Consequence if the defect is real</span>
+              <span>Impact if the defect reaches users</span>
+              <div class="rubric-scale">
+                <span class="rubric-scale-pill sev-low">Low</span>
+                <span class="rubric-scale-pill sev-med">Medium</span>
+                <span class="rubric-scale-pill sev-high">Critical</span>
+              </div>
             </div>
             <span class="rubric-axis-sep">&times;</span>
             <div class="rubric-axis-item">
               <strong>Priority</strong>
-              <span>How urgently to run this case</span>
+              <span>Urgency for execution or resolution</span>
+              <div class="rubric-scale">
+                <span class="rubric-scale-pill pri-low">Low</span>
+                <span class="rubric-scale-pill pri-med">Medium</span>
+                <span class="rubric-scale-pill pri-high">Urgent</span>
+              </div>
             </div>
           </div>
         </div>
